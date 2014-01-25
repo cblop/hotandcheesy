@@ -1,9 +1,12 @@
 function PlayerShip(game, x, y, bullets, cursors) {
 	Ship.call(this,game,game.add.sprite(x,y,'player'),bullets);
 	this.fireRate = config.player.fireRate;
-	    this.health = config.player.health;
+	this.health = config.player.health;
 	//  This will force it to decelerate and limit its speed
 	this.ship.body.drag.setTo(config.player.dragX, config.player.dragY);
+	this.ship.shipType = "player";
+	this.ship.index = 0;
+	this.ship.name = "player";
 
 
 //I want this to be static to load atlas before initialising the player

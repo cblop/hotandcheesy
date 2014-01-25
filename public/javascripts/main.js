@@ -29,7 +29,7 @@ var healthbar;
 var barback;
 
 var lightFilter;
-var fireFilter;
+//var fireFilter;
 var background;
 
 function dSpace(e){if((e.keyCode==32)&&(!e.shiftKey)){e.preventDefault();}}
@@ -79,7 +79,28 @@ function create () {
     {
         enemies.push(new EnemyShip(i, game, game.world.randomX, game.world.randomY, enemyBullets, player));
     }
+	
+    // Create some friends to help :)
+    friendBullets = game.add.group();
+    friendBullets.createMultiple(config.bullet.friendNumber, 'bullet');
+    friendBullets.setAll('anchor.x', 0.5);
+    friendBullets.setAll('anchor.y', 0.5);
+    friendBullets.setAll('outOfBoundsKill', true);
 
+    friends = [];
+    for (var i = 0; i < config.friend.number; i++){
+	friends.push(new FriendlyShip(i, game, game.world.randomX, game.worldrandomY, friendBullets, player));
+    }
+
+
+    for(var i=0; i<config.enemy.number; i++){
+	enemies[i].setOpponents(friends);
+	enemies[i].setAllies(enemies);
+    }
+    for(var i=0; i<config.friend.number; i++){
+	friends[i].setOpponents(enemies);
+	friends[i].setAllies(friends);
+    }
     //  Explosion pool
     explosions = game.add.group();
 
@@ -97,9 +118,9 @@ function create () {
     background = game.add.sprite(0, 0);
     background.width = config.map.width;
     background.height = config.map.width;
-    fireFilter = game.add.filter('Fire', config.map.width, config.map.height);
-    fireFilter.alpha = 0.0;
-    background.filters = [fireFilter];
+//    fireFilter = game.add.filter('Fire', config.map.width, config.map.height);
+//    fireFilter.alpha = 0.0;
+//    background.filters = [fireFilter];
 
 
 }
@@ -108,7 +129,7 @@ function update () {
 
     var result = false;
 
-    game.physics.collide(enemyBullets, player.ship, bulletHitPlayer, null, this);
+    game.physics.collide(enemyBullets, player.ship, bulletHitShip, null, this);
 
     for (var i = 0; i < config.enemy.number; i++)
     {
@@ -120,8 +141,15 @@ function update () {
 
             //game.physics.collide(player.ship, enemies[i].ship, shipsCollide, null, this);
             //game.physics.collide(player.ship, enemies[i].ship, shipsCollide);
-            game.physics.collide(bullets, enemies[i].ship, bulletHitEnemy, null, this);
+            game.physics.collide(bullets, enemies[i].ship, bulletHitShip, null, this);
         }
+    }
+    for (var i=0; i<config.friend.number; i++){
+	if(friends[i].alive){
+		friends[i].update();
+		game.physics.collide(player.ship, friends[i].ship, shipsCollide, null, this);
+		game.physics.collide(bullets, friends[i].ship, bulletHitShip, null, this);
+	}
     }
 
 	player.update(cursors);
@@ -142,7 +170,7 @@ function update () {
     barback.drawRect(8, config.map.height - 8, 24, -104);
     healthbar.drawRect(10, config.map.height - 10, 20, -100 + (100 * (player.health / config.player.health)));
 
-    fireFilter.update();
+//    fireFilter.update();
 
 
 }
@@ -150,53 +178,59 @@ function update () {
 function shipsCollide (shipA, shipB) {
     console.log("collide");
 
-    var destroyedA = player.damage(1);
-    var destroyedB = enemies[shipB.name].damage(1);
+    var shipA = identifyShip(shipA.shipType, shipA.index);
+    var shipB = identifyShip(shipB.shipType, shipB.index);
+	var destroyedA = shipA.damage(1);
+	var destroyedB = shipB.damage(1);
 
     if (destroyedA)
     {
         var explosionAnimation = explosions.getFirstDead();
-        explosionAnimation.reset(shipA.x, shipA.y);
+        explosionAnimation.reset(shipA.ship.x, shipA.ship.y);
         explosionAnimation.play('kaboom', 30, false, true);
     }
     else if (destroyedB)
     {
         var explosionAnimation = explosions.getFirstDead();
-        explosionAnimation.reset(shipB.x, shipB.y);
+        explosionAnimation.reset(shipB.ship.x, shipB.ship.y);
         explosionAnimation.play('kaboom', 30, false, true);
     }
 }
 
-function bulletHitPlayer (ship, bullet) {
-
-    bullet.kill();
-
-    var destroyed = player.damage(2);
-    console.log(destroyed);
-
-    if (destroyed)
-    {
-        var explosionAnimation = explosions.getFirstDead();
-        explosionAnimation.reset(ship.x, ship.y);
-        explosionAnimation.play('kaboom', 30, false, true);
-    }
-
+function identifyShip(shipType, index) {
+	if (shipType === "player") {
+		return player;
+	}else if (shipType === "friend") {
+		return friends[index];
+	}else if (shipType === "enemy") {
+		return enemies[index];
+	}else{
+		console.error('spelling mistake');
+	}
 }
 
-function bulletHitEnemy (enemy, bullet) {
-
+function bulletHitShip (ship, bullet) {
 	bullet.kill();
-
-    var destroyed = enemies[enemy.name].damage(4);
-
-    if (destroyed)
-    {
-        var explosionAnimation = explosions.getFirstDead();
-        explosionAnimation.reset(enemy.x, enemy.y);
-        explosionAnimation.play('kaboom', 30, false, true);
-    }
-
+	ship = identifyShip(ship.shipType, ship.index);
+	var dam;
+         if (ship.ship.shipType === "player") {
+                 dam = 1;
+         }else if (ship.ship.shipType === "friend") {
+                 dam = 1;
+         }else if (ship.ship.shipType === "enemy") {
+                 dam = 1;
+         }else{
+                 console.error('spelling mistake');
+         }
+	var destroyed = ship.damage(dam);
+	console.log(destroyed);
+	if(destroyed){
+		var explosionAnimation = explosions.getFirstDead();
+		explosionAnimation.reset(ship.ship.x, ship.ship.y);
+		explosionAnimation.play('kaboom', 30, false, true);
+	}
 }
+
 
 function render () {
 

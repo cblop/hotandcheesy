@@ -1,8 +1,8 @@
 var config = {
-	"map": {	"width": 1200, "height": 700,
+	"map": {	"width": 1200, "height": 400,
 		},
 	"bullet": {	"friendlyNumber": 100, "enemyNumber": 100, "playerNumber": 30,
-			"explosionNumber": 10,
+			"explosionNumber": 100,
 			"speed": 1000, 
 		},
 	"ship": {	"fireRate": 1000,
@@ -17,7 +17,7 @@ var config = {
 			"turnRate": 0.06, "acceleration": 200, "decceleration": -4,
 			
 		 },
-	"friendy": {},
-	"enemy": {	"number": 20},
+	"friend": {	"number": 3,},
+	"enemy": {	"number": 6,},
 };
 

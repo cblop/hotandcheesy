@@ -1,10 +1,9 @@
-function AIShip(index, game, sprite, bullets, player) {
+function AIShip(game, sprite, bullets, player) {
 	Ship.call(this, game, sprite, bullets);
 	this.player = player;
 	this.ship.body.immovable = false;
 	this.ship.body.bounce.setTo(1, 1);
 	this.ship.angle = game.rnd.angle();
-    this.ship.name = index.toString();
     this.rotationSpeed = 0.1; // rad/update
     this.setSpeed(100);
     this.opponents = [player];
