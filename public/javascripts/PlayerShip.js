@@ -15,24 +15,21 @@ this.update = function(cursors) {
 
     if (cursors.left.isDown)
     {
-        this.turn(-0.1);
-    //    this.turn(-config.player.turnRate);
+        this.turn(-config.player.turnRate);
     }
     else if (cursors.right.isDown)
     {
-        this.turn(0.1);
-    //    this.turn(config.player.turnRate);
+        this.turn(config.player.turnRate);
     }
 
     if (cursors.up.isDown)
     {
         //  The speed we'll travel at
-        //this.setSpeed(300);
-        this.accelerate(config.player.acceleration);
+        this.setSpeed(config.player.acceleration);
     }
     else
     {
-            this.accelerate(config.player.decleration);
+        this.accelerate(config.player.decleration);
     }
 
     if (this.currentSpeed > 0)
