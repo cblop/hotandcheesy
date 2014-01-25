@@ -19,13 +19,8 @@ var player;
 var enemies;
 var enemyBullets;
 var explosions;
-
-var currentSpeed = 0;
 var cursors;
-
 var bullets;
-var fireRate = 100;
-var nextFire = 0;
 
 function create () {
 

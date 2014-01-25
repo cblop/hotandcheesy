@@ -61,7 +61,7 @@ this.update = function() {
 
     if (this.currentSpeed > 0)
     {
-        game.physics.velocityFromRotation(this.ship.rotation, currentSpeed, this.ship.body.velocity);
+        game.physics.velocityFromRotation(this.ship.rotation, this.currentSpeed, this.ship.body.velocity);
     }
 	this.game.physics.velocityFromRotation(this.ship.rotation, this.currentSpeed, this.ship.body.velocity);
 
