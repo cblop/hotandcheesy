@@ -21,11 +21,16 @@ var enemyBullets;
 var explosions;
 var cursors;
 var bullets;
+var circle;
+
+function dSpace(e){if((e.keyCode==32)&&(!e.shiftKey)){e.preventDefault();}}
+window.addEventListener('keydown',dSpace,true);void 0;
 
 function create () {
 
     //  Resize our game world to be a 2000 x 2000 square
     game.world.setBounds(0,0,800,600);
+
 
     //  Our tiled scrolling background
     //land = game.add.tileSprite(0, 0, 800, 600, 'earth');
@@ -60,7 +65,7 @@ function create () {
     //  Explosion pool
     explosions = game.add.group();
 
-    for (var i = 0; i < 10; i++)
+    for (var i = 0; i < 30; i++)
     {
         var explosionAnimation = explosions.create(0, 0, 'kaboom', [0], false);
         explosionAnimation.anchor.setTo(0.5, 0.5);
@@ -73,18 +78,25 @@ function create () {
 
     cursors = game.input.keyboard.createCursorKeys();
 
+    circle = new Phaser.Circle(game.world.centerX, 100,64);
+
 }
 
 function update () {
 
-    game.physics.collide(enemyBullets, player, bulletHitPlayer, null, this);
+    var result = false;
+
+    game.physics.collide(enemyBullets, player.ship, bulletHitPlayer, null, this);
 
     for (var i = 0; i < enemies.length; i++)
     {
         if (enemies[i].alive)
         {
             enemies[i].update();
-            game.physics.collide(player.ship, enemies[i].ship);
+            result = game.physics.collide(player.ship, enemies[i].ship);
+
+            //game.physics.collide(player.ship, enemies[i].ship, shipsCollide, null, this);
+            //game.physics.collide(player.ship, enemies[i].ship, shipsCollide);
             game.physics.collide(bullets, enemies[i].ship, bulletHitEnemy, null, this);
         }
     }
@@ -94,23 +106,36 @@ function update () {
     //land.tilePosition.x = -game.camera.x;
     //land.tilePosition.y = -game.camera.y;
 
-    if (game.input.activePointer.isDown)
+    if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && player.alive)
     {
         //  Boom!
         player.fire();
     }
+    if (result) {
+        player.setSpeed(0);
+        player.updateVelocity();
+    }
 
 }
 
-function bulletHitPlayer (player, bullet) {
+function bulletHitPlayer (ship, bullet) {
 
     bullet.kill();
+
+    var destroyed = player.damage();
+    console.log(destroyed);
+
+    if (destroyed)
+    {
+        var explosionAnimation = explosions.getFirstDead();
+        explosionAnimation.reset(ship.x, ship.y);
+        explosionAnimation.play('kaboom', 30, false, true);
+    }
 
 }
 
 function bulletHitEnemy (enemy, bullet) {
 
-    //console.log("hit");
 	bullet.kill();
 
     var destroyed = enemies[enemy.name].damage();
@@ -126,6 +151,6 @@ function bulletHitEnemy (enemy, bullet) {
 
 function render () {
 
-    // game.debug.renderText('Active Bullets: ' + bullets.countLiving() + ' / ' + bullets.total, 32, 32);
+    //game.debug.renderText('Active Bullets: ' + bullets.countLiving() + ' / ' + bullets.total, 32, 32);
 
 }

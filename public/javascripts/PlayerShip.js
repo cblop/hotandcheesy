@@ -1,6 +1,7 @@
 function PlayerShip(game, x, y, bullets, cursors) {
-	Ship.call(this,game,game.add.sprite(x,y,'player','tank1'),bullets);
+	Ship.call(this,game,game.add.sprite(x,y,'player'),bullets);
 	this.fireRate = 50;
+    this.health = 30;
 	//  This will force it to decelerate and limit its speed
 	this.ship.body.drag.setTo(200, 200);
 
@@ -24,7 +25,8 @@ this.update = function(cursors) {
     if (cursors.up.isDown)
     {
         //  The speed we'll travel at
-        this.setSpeed(300);
+        //this.setSpeed(300);
+        this.accelerate(200);
     }
     else
     {
@@ -36,7 +38,7 @@ this.update = function(cursors) {
         this.updateVelocity();
     }
 
-    if (this.game.input.activePointer.isDown)
+    if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && player.alive)
     {
         //  Boom!
         this.fire();
