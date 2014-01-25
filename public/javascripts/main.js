@@ -1,5 +1,6 @@
 var gameWidth = 1024;
 var gameHeight = 768;
+var maxHealth = 30;
 var game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
 // var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
@@ -130,8 +131,8 @@ function update () {
         player.updateVelocity();
     }
 
-    barback.drawRect(10, gameHeight - 10, 50, -100);
-    healthbar.drawRect(10, gameHeight - 10, 50, -100);
+    barback.drawRect(8, gameHeight - 8, 24, -104);
+    healthbar.drawRect(10, gameHeight - 10, 20, -100 + (100 - (player.health / maxHealth)));
 
 
 }
