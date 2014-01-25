@@ -52,14 +52,8 @@ function AIShip(index, game, sprite, bullets, player) {
 
     this.evadeTarget = function()
     {
-        var angleBetween = this.getAngleToTarget();
-        if (angleBetween < 0) {
-            this.turn(-this.rotationSpeed);
-        }
-        else
-        {
-            this.turn(this.rotationSpeed);
-        }
+        // Turn away from and evade our target
+        this.turn((this.getAngleToTarget() > 0) ? this.rotationSpeed : -this.rotationSpeed);
         this.updateVelocity();
     };
 
@@ -102,16 +96,8 @@ function AIShip(index, game, sprite, bullets, player) {
     };
 
     this.engageTarget = function() {
-        // We adjust rotation in increments of 0.1rads each time this function is
-        // called. The rotation is simply to point us at our target.
-        var angleBetween = this.getAngleToTarget();
-        if (angleBetween < 0) {
-            this.turn(this.rotationSpeed);
-        }
-        else
-        {
-            this.turn(-this.rotationSpeed);
-        }
+        // Turn toward and follow our target
+        this.turn((this.getAngleToTarget() < 0) ? this.rotationSpeed : -this.rotationSpeed);
         this.updateVelocity();
     };
 
