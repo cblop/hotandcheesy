@@ -1,15 +1,16 @@
 Ship = function(game, sprite, bullets) {
-//Initialese a ship with movement, firing and death
+    //Initialese a ship with movement, firing and death
 	//Stores necessary information about the ship
 	this.game = game;
 	this.bullets = bullets;
-	this.fireRate = 1000;
+	this.fireRate = config.ship.fireRate;
 	this.nextFire = 0;
 	this.currentSpeed = 0;
 	this.alive = true;
-	this.health = 10;
+	this.health = config.ship.health;
 	this.allies = [];
 	this.enemies = [];
+    this.numberOfShots = 0;
 	
 	//Applies the sprite to the ship
 	this.ship = sprite;
@@ -17,7 +18,7 @@ Ship = function(game, sprite, bullets) {
         this.ship.bringToTop();
 	//  This will force it to decelerate and limit its speed
         //this.ship.body.drag.setTo(200, 200);
-        this.ship.body.maxVelocity.setTo(400, 400);
+        this.ship.body.maxVelocity.setTo(config.ship.maxVelX, config.ship.maxVelY);
 	//introduces collision with world
         this.ship.body.collideWorldBounds = true;
 
@@ -34,7 +35,7 @@ Ship = function(game, sprite, bullets) {
 	}
 
 	this.accelerate = function(delSpeed) {
-		this.currentSpeed = delSpeed;
+		this.currentSpeed += delSpeed;
 	}
 
 	this.setSpeed = function(speed) {
@@ -52,10 +53,11 @@ Ship = function(game, sprite, bullets) {
 		    var bullet = bullets.getFirstDead();
 		    bullet.reset(this.ship.x, this.ship.y);
 		    bullet.rotation = this.ship.rotation;
-	      	    this.game.physics.velocityFromRotation(this.ship.rotation, 1000, bullet.body.velocity);
+            this.game.physics.velocityFromRotation(this.ship.rotation, config.bullet.speed, bullet.body.velocity);
+            this.numberOfShots++;
 		}
 
-	}
+	};
 
 	this.damage = function(amount) {
 	    this.health -= amount;

@@ -25,12 +25,11 @@ this.update = function(cursors) {
     if (cursors.up.isDown)
     {
         //  The speed we'll travel at
-        //this.setSpeed(300);
-        this.accelerate(config.player.acceleration);
+        this.setSpeed(config.player.acceleration);
     }
     else
     {
-            this.accelerate(config.player.decleration);
+        this.accelerate(config.player.decleration);
     }
 
     if (this.currentSpeed > 0)
