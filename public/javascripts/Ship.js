@@ -7,7 +7,7 @@ Ship = function(game, sprite, bullets) {
 	this.nextFire = 0;
 	this.currentSpeed = 0;
 	this.alive = true;
-	this.health = 1;
+	this.health = 5;
 	this.allies = [];
 	this.enemies = [];
 	

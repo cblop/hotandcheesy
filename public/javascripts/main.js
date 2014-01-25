@@ -21,11 +21,16 @@ var enemyBullets;
 var explosions;
 var cursors;
 var bullets;
+var circle;
+
+function dSpace(e){if((e.keyCode==32)&&(!e.shiftKey)){e.preventDefault();}}
+window.addEventListener('keydown',dSpace,true);void 0;
 
 function create () {
 
     //  Resize our game world to be a 2000 x 2000 square
     game.world.setBounds(0,0,config.map.width,config.map.height);
+
 
     //  Our tiled scrolling background
     //land = game.add.tileSprite(0, 0, 800, 600, 'earth');
@@ -55,7 +60,7 @@ function create () {
 
     for (var i = 0; i < config.enemy.number; i++)
     {
-        enemies.push(new EnemyShip(game, game.world.randomX, game.world.randomY, enemyBullets, player));
+        enemies.push(new EnemyShip(i, game, game.world.randomX, game.world.randomY, enemyBullets, player));
     }
 
     //  Explosion pool
@@ -72,19 +77,26 @@ function create () {
 
     cursors = game.input.keyboard.createCursorKeys();
 
+    circle = new Phaser.Circle(game.world.centerX, 100,64);
+
 }
 
 function update () {
 
-    game.physics.collide(enemyBullets, player, bulletHitPlayer, null, this);
+    var result = false;
+
+    game.physics.collide(enemyBullets, player.ship, bulletHitPlayer, null, this);
 
     for (var i = 0; i < config.enemy.number; i++)
     {
         if (enemies[i].alive)
         {
             enemies[i].update();
-            game.physics.collide(player, enemies[i].player);
-            game.physics.collide(bullets, enemies[i].player, bulletHitEnemy, null, this);
+            result = game.physics.collide(player.ship, enemies[i].ship);
+
+            //game.physics.collide(player.ship, enemies[i].ship, shipsCollide, null, this);
+            //game.physics.collide(player.ship, enemies[i].ship, shipsCollide);
+            game.physics.collide(bullets, enemies[i].ship, bulletHitEnemy, null, this);
         }
     }
 
@@ -93,30 +105,44 @@ function update () {
     //land.tilePosition.x = -game.camera.x;
     //land.tilePosition.y = -game.camera.y;
 
-    if (game.input.activePointer.isDown)
+    if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && player.alive)
     {
         //  Boom!
         player.fire();
     }
+    if (result) {
+        player.setSpeed(0);
+        player.updateVelocity();
+    }
 
 }
 
-function bulletHitPlayer (player, bullet) {
+function bulletHitPlayer (ship, bullet) {
 
     bullet.kill();
 
-}
-
-function bulletHitEnemy (player, bullet) {
-
-	bullet.kill();
-
-    var destroyed = enemies[player.name].damage();
+    var destroyed = player.damage();
+    console.log(destroyed);
 
     if (destroyed)
     {
         var explosionAnimation = explosions.getFirstDead();
-        explosionAnimation.reset(player.x, player.y);
+        explosionAnimation.reset(ship.x, ship.y);
+        explosionAnimation.play('kaboom', 30, false, true);
+    }
+
+}
+
+function bulletHitEnemy (enemy, bullet) {
+
+	bullet.kill();
+
+    var destroyed = enemies[enemy.name].damage();
+
+    if (destroyed)
+    {
+        var explosionAnimation = explosions.getFirstDead();
+        explosionAnimation.reset(enemy.x, enemy.y);
         explosionAnimation.play('kaboom', 30, false, true);
     }
 
@@ -124,6 +150,6 @@ function bulletHitEnemy (player, bullet) {
 
 function render () {
 
-    // game.debug.renderText('Active Bullets: ' + bullets.countLiving() + ' / ' + bullets.total, 32, 32);
+    //game.debug.renderText('Active Bullets: ' + bullets.countLiving() + ' / ' + bullets.total, 32, 32);
 
 }

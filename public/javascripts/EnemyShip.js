@@ -1,12 +1,19 @@
-function EnemyShip(game, x, y, bullets, player) {
-	Ship.call(this, game, game.add.sprite(x,y,'enemy','tank1'), bullets);
+function EnemyShip(index, game, x, y, bullets, player) {
+	Ship.call(this, game, game.add.sprite(x,y,'enemy'), bullets);
 	this.player = player;
-	this.ship.body.immovable = true;
+	this.ship.body.immovable = false;
 	this.ship.body.bounce.setTo(1, 1);
 	this.ship.angle = game.rnd.angle();
+    this.ship.name = index.toString();
     this.rotationSpeed = 0.1; // rad/update
-    this.setSpeed = 100;
+    this.setSpeed(100);
+    this.opponents = [player];
 	this.updateVelocity();
+
+    // Private variables
+    var firingDistance = 500; // Number.POSITIVE_INFINITY
+    var evasionDistance = 150;
+    var firingAngle = 0.1; // Radians
 
     this.preloader = function(game) {
         game.load.atlas('enemy', 'assets/games/tanks/enemy-tanks.png', 'assets/games/tanks/tanks.json');
@@ -14,29 +21,60 @@ function EnemyShip(game, x, y, bullets, player) {
 
     this.update = function() {
 
-        // Enemy AI goes here
+        this.prioritiseTargets();
+        this.decideStrategy();
+        this.checkAndFire();
 
-        //this.acquireTargets(this.player);
-        //this.prioritiseTargets();
-        //this.engageTarget();
+    };
 
-        this.turn(this.rotationSpeed);
+    this.distanceToTarget = function()
+    {
+        return this.game.physics.distanceBetween(this.ship, this.target.ship);
+    };
 
-        if (this.game.physics.distanceBetween(this.ship, this.player) < 300)
+    this.decideStrategy = function()
+    {
+        if (this.distanceToTarget() < evasionDistance)
+        {
+            this.evadeTarget();
+        }
+        else
+        {
+            this.engageTarget();
+        }
+    };
+
+    this.evadeTarget = function()
+    {
+        var angleBetween = this.getAngleToTarget();
+        if (angleBetween < 0) {
+            this.turn(-this.rotationSpeed);
+        }
+        else
+        {
+            this.turn(this.rotationSpeed);
+        }
+//        this.turn(-0.05*angleBetween);
+        this.updateVelocity();
+    };
+
+    this.checkAndFire = function()
+    {
+        // Check if we're within firing range and facing our target, if we are,
+        // shoot.
+        if ((this.distanceToTarget() < firingDistance) && 
+            (Math.abs(this.game.physics.angleBetween(this.ship, this.target.ship) - this.ship.rotation) < firingAngle))
         {
             this.fire();
         }
-
-    }
-
-    this.acquireTargets = function(newOpponents) {
-        this.opponents = newOpponents; 
-    }
+    };
 
     this.prioritiseTargets = function() {
         // 1) Check proximity
         //   - This is an analog for how threatening the opponent is
         var minIndex = -1;
+        this.target = this.opponents[0];
+        return;
         this.opponents.reduce(
                 function(prevVal, currentVal, index, array) {
                     res = distanceBetween(el.ship, this.ship);
@@ -55,26 +93,30 @@ function EnemyShip(game, x, y, bullets, player) {
         // 4) Calculate time to rotate to facing
         //   - Consider the velocity of the opponent
         // 5) Consider opponent velocity in target acquisition(?)
-    }
+    };
 
-    this.shouldShoot = function() {
-        return true;
-    }
+    this.getAngleToTarget = function() {
+        var angleBetween = this.ship.rotation - this.game.physics.angleBetween(this.ship, this.player.ship);
+        var angleBetween = ((angleBetween + Math.PI) % (2*Math.PI) - Math.PI);
+        return angleBetween;
+    };
 
     this.engageTarget = function() {
         // We adjust rotation in increments of 0.1rads each time this function is
         // called. The rotation is simply to point us at our target.
-        var diffAngle = this.ship.rotation - game.physics.angleBetween(this.ship, target.ship);
-        if (diffAngle < Math.PI)
-        {
-            this.turn(-rotationSpeed);
+//        var angleBetween = this.ship.rotation - this.game.physics.angleBetween(this.ship, this.player.ship);
+//        var angleBetween = ((angleBetween + Math.PI) % (2*Math.PI) - Math.PI);
+        var angleBetween = this.getAngleToTarget();
+        if (angleBetween < 0) {
+            this.turn(this.rotationSpeed);
         }
         else
         {
-            this.turn(rotationSpeed);
+            this.turn(-this.rotationSpeed);
         }
+//        this.turn(-0.05*angleBetween);
         this.updateVelocity();
-    }
+    };
 
 };
 
