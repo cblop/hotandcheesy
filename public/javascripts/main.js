@@ -3,8 +3,9 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create
 
 function preload () {
 
-    game.load.atlas('tank', 'assets/games/tanks/tanks.png', 'assets/games/tanks/tanks.json');
-    game.load.atlas('enemy', 'assets/games/tanks/enemy-tanks.png', 'assets/games/tanks/tanks.json');
+    game.load.image('player', 'assets/ships/playerShip.png');//, 'assets/games/tanks/tanks.json');
+    game.load.image('enemy', 'assets/ships/enemyShip.png');
+    game.load.image('friend', 'assets/ships/friendlyShip.png');
     game.load.image('bullet', 'assets/games/tanks/bullet.png');
     game.load.image('earth', 'assets/games/tanks/scorched_earth.png');
     game.load.spritesheet('kaboom', 'assets/games/tanks/explosion.png', 64, 64, 23);
@@ -27,8 +28,8 @@ function create () {
     game.world.setBounds(0,0,800,600);
 
     //  Our tiled scrolling background
-    land = game.add.tileSprite(0, 0, 800, 600, 'earth');
-    land.fixedToCamera = true;
+    //land = game.add.tileSprite(0, 0, 800, 600, 'earth');
+    //land.fixedToCamera = true;
 
 
      //  Our bullet group
@@ -38,8 +39,9 @@ function create () {
      bullets.setAll('anchor.y', 0.5);
      bullets.setAll('outOfBoundsKill', true);
 
+    cursors = game.input.keyboard.createCursorKeys();
 	//Generate player
-	player = new PlayerShip(game, 400,300, bullets); 
+	player = new PlayerShip(game, 50, 50, bullets, cursors); 
     //  The enemies bullet group
     enemyBullets = game.add.group();
     enemyBullets.createMultiple(100, 'bullet');
@@ -104,8 +106,8 @@ function update () {
     //  Our bullet group
 	player.update();
 
-    land.tilePosition.x = -game.camera.x;
-    land.tilePosition.y = -game.camera.y;
+    //land.tilePosition.x = -game.camera.x;
+    //land.tilePosition.y = -game.camera.y;
 
     if (game.input.activePointer.isDown)
     {

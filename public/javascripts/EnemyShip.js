@@ -9,6 +9,8 @@ function EnemyShip(game, x, y, bullets, player) {
 	this.ship.body.collideWorldBounds = true;
 	this.ship.body.bounce.setTo(1, 1);
 	this.ship.angle = game.rnd.angle();
+    this.rotationSpeed = 0.1; // rad/update
+    this.forwardSpeed = 100;
 
 	game.physics.velocityFromRotation(this.ship.rotation, 100, this.ship.body.velocity);
 
@@ -19,6 +21,12 @@ function EnemyShip(game, x, y, bullets, player) {
     this.update = function() {
 
         // Enemy AI goes here
+
+        //this.acquireTargets(this.player);
+        //this.prioritiseTargets();
+        //this.engageTarget();
+
+        this.turn(this.rotationSpeed);
 
         if (this.game.physics.distanceBetween(this.ship, this.player) < 300)
         {
@@ -37,7 +45,7 @@ function EnemyShip(game, x, y, bullets, player) {
     }
 
     this.acquireTargets = function(newOpponents) {
-        this.opponents = opponents; 
+        this.opponents = newOpponents; 
     }
 
     this.prioritiseTargets = function() {
@@ -68,11 +76,9 @@ function EnemyShip(game, x, y, bullets, player) {
         return true;
     }
 
-    this.adjustMovement = function() {
+    this.engageTarget = function() {
         // We adjust rotation in increments of 0.1rads each time this function is
         // called. The rotation is simply to point us at our target.
-        var rotationSpeed = 0.1; // rad/update
-        var forwardSpeed = 100;
         var diffAngle = this.ship.rotation - game.physics.angleBetween(this.ship, target.ship);
         if (diffAngle < Math.PI)
         {
@@ -82,8 +88,14 @@ function EnemyShip(game, x, y, bullets, player) {
         {
             this.ship.rotation += rotationSpeed;
         }
-        game.physics.velocityFromRotation(this.ship.rotation, forwardSpeed, this.ship.body.velocity);
+        game.physics.velocityFromRotation(this.ship.rotation, this.forwardSpeed, this.ship.body.velocity);
     }
+
+    this.turn = function(dRad)
+    {
+        this.ship.rotation += dRad;
+        game.physics.velocityFromRotation(this.ship.rotation + dRad, this.forwardSpeed, this.ship.body.velocity);
+    };
 
 };
 
