@@ -54,7 +54,7 @@ function create () {
 
     for (var i = 0; i < 20; i++)
     {
-        enemies.push(new EnemyShip(game, game.world.randomX, game.world.randomY, enemyBullets, player));
+        enemies.push(new EnemyShip(i, game, game.world.randomX, game.world.randomY, enemyBullets, player));
     }
 
     //  Explosion pool
@@ -84,8 +84,8 @@ function update () {
         if (enemies[i].alive)
         {
             enemies[i].update();
-            game.physics.collide(player, enemies[i].player);
-            game.physics.collide(bullets, enemies[i].player, bulletHitEnemy, null, this);
+            game.physics.collide(player.ship, enemies[i].ship);
+            game.physics.collide(bullets, enemies[i].ship, bulletHitEnemy, null, this);
         }
     }
 
@@ -123,16 +123,22 @@ function bulletHitPlayer (player, bullet) {
 
 }
 
-function bulletHitEnemy (player, bullet) {
+function bulletHitEnemy (enemy, bullet) {
 
+    //console.log("hit");
 	bullet.kill();
 
-    var destroyed = enemies[player.name].damage();
+    var destroyed = enemies[enemy.name].damage();
+
+    // this is a terrible hack - remove it
+    if (enemies[enemy.name].health < 1) {
+        enemies[enemy.name].ship.kill();
+    }
 
     if (destroyed)
     {
         var explosionAnimation = explosions.getFirstDead();
-        explosionAnimation.reset(player.x, player.y);
+        explosionAnimation.reset(enemy.x, enemy.y);
         explosionAnimation.play('kaboom', 30, false, true);
     }
 

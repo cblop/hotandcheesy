@@ -1,4 +1,4 @@
-function EnemyShip(game, x, y, bullets, player) {
+function EnemyShip(index, game, x, y, bullets, player) {
 	Ship.call(this, game, x, y, bullets);
 	this.player = player;
 	this.ship = game.add.sprite(x, y, 'enemy', 'tank1');
@@ -9,6 +9,7 @@ function EnemyShip(game, x, y, bullets, player) {
 	this.ship.body.collideWorldBounds = true;
 	this.ship.body.bounce.setTo(1, 1);
 	this.ship.angle = game.rnd.angle();
+    this.ship.name = index.toString();
     this.rotationSpeed = 0.1; // rad/update
     this.forwardSpeed = 100;
 
