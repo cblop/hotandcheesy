@@ -1,9 +1,12 @@
 function FriendlyShip(game, x, y, bullets, player) {
-	Ship.call(this, game, x, y, bullets);
+	this = new Ship(game, x, y, bullets);
 	this.player = player;
 }
 
-FriendlyShip.prototype = new Ship;
+FriendlyShip.prototype.preloader = function(game) {
+	game.load.atlas('tank', 'assets/games/tanks/tanks.png', 'assets/games/tanks/tanks.json');
+}
+
 
 FriendlyShip.prototype.update = function() {
 

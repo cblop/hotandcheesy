@@ -1,9 +1,11 @@
 function EnemyShip(game, x, y, bullets, player) {
-	Ship.call(this, game, x, y, bullets);
+	this.prototype = new Ship(game, x,y, bullets);
 	this.player = player;
 }
 
-EnemyShip.prototype = new Ship;
+EnemyShip.prototype.preloader = function(game) {
+	game.load.atlas('enemy', 'assets/games/tanks/enemy-tanks.png', 'assets/games/tanks/tanks.json');
+}
 
 EnemyShip.prototype.update = function() {
 

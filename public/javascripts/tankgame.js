@@ -72,7 +72,7 @@ EnemyTank.prototype.update = function() {
             bullet.rotation = this.game.physics.moveToObject(bullet, this.player, 500);
         }
     }
-
+	this.tank.body.angularAcceleration += 0.01;
 };
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
