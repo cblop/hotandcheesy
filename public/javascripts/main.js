@@ -1,7 +1,5 @@
-var gameWidth = 1024;
-var gameHeight = 768;
 var maxHealth = 30;
-var game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
+var game = new Phaser.Game(config.map.width, config.map.height, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
 // var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
 function preload () {
@@ -36,7 +34,6 @@ window.addEventListener('keydown',dSpace,true);void 0;
 function create () {
 
     //  Resize our game world to be a 2000 x 2000 square
-    game.world.setBounds(0,0,gameWidth,gameHeight);
 
     barback = game.add.graphics(0, 0);
     healthbar = game.add.graphics(0, 0);
@@ -44,6 +41,7 @@ function create () {
     healthbar.lineStyle(2, 0x00FF00, 1); // width, color (0x0000FF), alpha (0 -> 1) // required settings
     barback.beginFill(0x000000, 1);
     healthbar.beginFill(0x00FF00, 1);
+    game.world.setBounds(0,0,config.map.width,config.map.height);
 
 
     //  Our tiled scrolling background
@@ -53,17 +51,18 @@ function create () {
 
      //  Our bullet group
      bullets = game.add.group();
-     bullets.createMultiple(30, 'bullet');
+     bullets.createMultiple(config.bullet.playerNumber, 'bullet');
      bullets.setAll('anchor.x', 0.5);
      bullets.setAll('anchor.y', 0.5);
      bullets.setAll('outOfBoundsKill', true);
 
     cursors = game.input.keyboard.createCursorKeys();
 	//Generate player
-	player = new PlayerShip(game, 50, 50, bullets, cursors); 
+	player = new PlayerShip(game, config.player.startX, config.player.startY, bullets, cursors); 
+
     //  The enemies bullet group
     enemyBullets = game.add.group();
-    enemyBullets.createMultiple(100, 'bullet');
+    enemyBullets.createMultiple(config.bullet.enemyNumber, 'bullet');
     enemyBullets.setAll('anchor.x', 0.5);
     enemyBullets.setAll('anchor.y', 0.5);
     enemyBullets.setAll('outOfBoundsKill', true);
@@ -71,7 +70,7 @@ function create () {
     //  Create some baddies to waste :)
     enemies = [];
 
-    for (var i = 0; i < 20; i++)
+    for (var i = 0; i < config.enemy.number; i++)
     {
         enemies.push(new EnemyShip(i, game, game.world.randomX, game.world.randomY, enemyBullets, player));
     }
@@ -79,15 +78,13 @@ function create () {
     //  Explosion pool
     explosions = game.add.group();
 
-    for (var i = 0; i < 30; i++)
+    for (var i = 0; i < config.bullet.explosionNumber; i++)
     {
         var explosionAnimation = explosions.create(0, 0, 'kaboom', [0], false);
         explosionAnimation.anchor.setTo(0.5, 0.5);
         explosionAnimation.animations.add('kaboom');
     }
 
-    game.camera.follow(player);
-    game.camera.deadzone = new Phaser.Rectangle(150, 150, 500, 300);
     game.camera.focusOnXY(0, 0);
 
     cursors = game.input.keyboard.createCursorKeys();
@@ -102,7 +99,7 @@ function update () {
 
     game.physics.collide(enemyBullets, player.ship, bulletHitPlayer, null, this);
 
-    for (var i = 0; i < enemies.length; i++)
+    for (var i = 0; i < config.enemy.number; i++)
     {
         if (enemies[i].alive)
         {
@@ -131,8 +128,8 @@ function update () {
         player.updateVelocity();
     }
 
-    barback.drawRect(8, gameHeight - 8, 24, -104);
-    healthbar.drawRect(10, gameHeight - 10, 20, -100 + (100 - (player.health / maxHealth)));
+    barback.drawRect(8, config.map.height - 8, 24, -104);
+    healthbar.drawRect(10, config.map.height - 10, 20, -100 + (100 - (player.health / maxHealth)));
 
 
 }
