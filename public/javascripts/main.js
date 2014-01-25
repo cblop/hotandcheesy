@@ -89,22 +89,7 @@ function update () {
         }
     }
 
-    if (cursors.left.isDown)
-    {
-        player.turn(-4);
-    }
-    else if (cursors.right.isDown)
-    {
-        player.turn(4);
-    }
-
-    if (cursors.up.isDown)
-    {
-        //  The speed we'll travel at
-        	player.currentSpeed = 304;
-	}
-    //  Our bullet group
-	player.update();
+	player.update(cursors);
 
     //land.tilePosition.x = -game.camera.x;
     //land.tilePosition.y = -game.camera.y;
@@ -129,11 +114,6 @@ function bulletHitEnemy (enemy, bullet) {
 	bullet.kill();
 
     var destroyed = enemies[enemy.name].damage();
-
-    // this is a terrible hack - remove it
-    if (enemies[enemy.name].health < 1) {
-        enemies[enemy.name].ship.kill();
-    }
 
     if (destroyed)
     {
