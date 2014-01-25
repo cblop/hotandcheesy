@@ -55,7 +55,6 @@ function AIShip(index, game, sprite, bullets, player) {
         {
             this.turn(this.rotationSpeed);
         }
-//        this.turn(-0.05*angleBetween);
         this.updateVelocity();
     };
 
@@ -73,18 +72,20 @@ function AIShip(index, game, sprite, bullets, player) {
     this.prioritiseTargets = function() {
         // 1) Check proximity
         //   - This is an analog for how threatening the opponent is
-        var minIndex = -1;
         this.target = this.opponents[0];
-        return;
-        this.opponents.reduce(
-                function(prevVal, currentVal, index, array) {
-                    res = distanceBetween(el.ship, this.ship);
-                    if (res < prevVal)
-                    {
-                        minIndex = index;
-                        return res;
-                    }
-                } , Number.POSITIVE_INFINITY);
+        var closestIndex = this.opponents.map(function(el, index, arr)
+                { return this.game.physics.distanceBetween(el.ship, this.ship); }
+            ).reduce(function(prevVal, currVal, ind, arr)
+                { return (arr[currVal] < arr[prevVal]) ? currVal : prevVal; }
+            , 0);
+//                function(prevVal, currentVal, index, array) {
+//                    res = this.game.physics.distanceBetween(array[currentVal].ship, this.ship);
+//                    if (res < prevVal)
+//                    {
+//                        return res;
+//                    }
+//                    return currentVal;
+//                }, Number.POSITIVE_INFINITY);
 
         this.target = this.opponents[minIndex];
         // return minIndex;
