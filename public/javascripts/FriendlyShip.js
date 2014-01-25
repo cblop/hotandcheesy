@@ -1,15 +1,4 @@
-function FriendlyShip(game, x, y, bullets, player) {
-	this = new Ship(game, x, y, bullets);
-	this.player = player;
-}
+function FriendlyShip(index, game, x, y, bullets, player) {
+	AIShip.call(this, index, game, game.add.sprite(x,y,'enemy','tank1'), bullets);
+};
 
-FriendlyShip.prototype.preloader = function(game) {
-	game.load.atlas('tank', 'assets/games/tanks/tanks.png', 'assets/games/tanks/tanks.json');
-}
-
-
-FriendlyShip.prototype.update = function() {
-
-	// Friendly AI goes here
-	
-}
