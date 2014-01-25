@@ -1,13 +1,13 @@
 function EnemyShip(game, x, y, bullets, player) {
 	this.prototype = new Ship(game, x,y, bullets);
 	this.player = player;
-}
 
-EnemyShip.prototype.preloader = function(game) {
+
+this.preloader = function(game) {
 	game.load.atlas('enemy', 'assets/games/tanks/enemy-tanks.png', 'assets/games/tanks/tanks.json');
-}
+};
 
-EnemyShip.prototype.update = function() {
+this.update = function() {
 
 	// Enemy AI goes here
 
@@ -24,5 +24,7 @@ EnemyShip.prototype.update = function() {
             bullet.rotation = this.game.physics.moveToObject(bullet, this.player, 500);
         }
     }
+
+};
 
 }
