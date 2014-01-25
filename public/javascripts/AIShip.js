@@ -7,9 +7,11 @@ function AIShip(index, game, sprite, bullets, player) {
     this.ship.name = index.toString();
     this.rotationSpeed = 0.1; // rad/update
     this.setSpeed(100);
-    this.opponents = [player];
+    this.opponents = [];
+    this.opponents.push(player);
 	this.updateVelocity();
     this.target = player;
+    var thisref = this;
 
     // Private variables
     var firingDistance = 500; // Number.POSITIVE_INFINITY
@@ -72,24 +74,13 @@ function AIShip(index, game, sprite, bullets, player) {
     this.prioritiseTargets = function() {
         // 1) Check proximity
         //   - This is an analog for how threatening the opponent is
-        this.target = this.opponents[0];
         var closestIndex = this.opponents.map(function(el, index, arr)
-                { return this.game.physics.distanceBetween(el.ship, this.ship); }
+                { return this.game.physics.distanceBetween(el.ship, thisref.ship); }
             ).reduce(function(prevVal, currVal, ind, arr)
                 { return (arr[currVal] < arr[prevVal]) ? currVal : prevVal; }
             , 0);
-//                function(prevVal, currentVal, index, array) {
-//                    res = this.game.physics.distanceBetween(array[currentVal].ship, this.ship);
-//                    if (res < prevVal)
-//                    {
-//                        return res;
-//                    }
-//                    return currentVal;
-//                }, Number.POSITIVE_INFINITY);
-
-        this.target = this.opponents[minIndex];
+        this.target = this.opponents[closestIndex];
         // return minIndex;
-        // 2) Check whether we're facing an enemy. If we are, shoot.
         // 3) If there are friendly obstacles between this ship and the opponent,
         //   remove the opponent from the list of options
         // 4) Calculate time to rotate to facing
@@ -98,7 +89,7 @@ function AIShip(index, game, sprite, bullets, player) {
     };
 
     this.getAngleToTarget = function() {
-        var angleBetween = this.ship.rotation - this.game.physics.angleBetween(this.ship, this.player.ship);
+        var angleBetween = this.ship.rotation - this.game.physics.angleBetween(this.ship, this.target.ship);
         var angleBetween = ((angleBetween + Math.PI) % (2*Math.PI) - Math.PI);
         return angleBetween;
     };
