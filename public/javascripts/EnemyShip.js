@@ -1,5 +1,5 @@
 function EnemyShip(index, game, x, y, bullets, player) {
-	Ship.call(this, game, game.add.sprite(x,y,'enemy','tank1'), bullets);
+	Ship.call(this, game, game.add.sprite(x,y,'enemy'), bullets);
 	this.player = player;
 	this.ship.body.immovable = false;
 	this.ship.body.bounce.setTo(1, 1);

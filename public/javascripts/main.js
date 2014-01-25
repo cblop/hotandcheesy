@@ -23,10 +23,14 @@ var cursors;
 var bullets;
 var circle;
 
+function dSpace(e){if((e.keyCode==32)&&(!e.shiftKey)){e.preventDefault();}}
+window.addEventListener('keydown',dSpace,true);void 0;
+
 function create () {
 
     //  Resize our game world to be a 2000 x 2000 square
     game.world.setBounds(0,0,800,600);
+
 
     //  Our tiled scrolling background
     //land = game.add.tileSprite(0, 0, 800, 600, 'earth');
@@ -61,7 +65,7 @@ function create () {
     //  Explosion pool
     explosions = game.add.group();
 
-    for (var i = 0; i < 10; i++)
+    for (var i = 0; i < 30; i++)
     {
         var explosionAnimation = explosions.create(0, 0, 'kaboom', [0], false);
         explosionAnimation.anchor.setTo(0.5, 0.5);
@@ -80,8 +84,9 @@ function create () {
 
 function update () {
 
-    game.physics.collide(enemyBullets, player, bulletHitPlayer, null, this);
     var result = false;
+
+    game.physics.collide(enemyBullets, player.ship, bulletHitPlayer, null, this);
 
     for (var i = 0; i < enemies.length; i++)
     {
@@ -101,7 +106,7 @@ function update () {
     //land.tilePosition.x = -game.camera.x;
     //land.tilePosition.y = -game.camera.y;
 
-    if (game.input.activePointer.isDown)
+    if (game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR) && player.alive)
     {
         //  Boom!
         player.fire();
@@ -113,16 +118,17 @@ function update () {
 
 }
 
-function bulletHitPlayer (player, bullet) {
+function bulletHitPlayer (ship, bullet) {
 
     bullet.kill();
 
     var destroyed = player.damage();
+    console.log(destroyed);
 
     if (destroyed)
     {
         var explosionAnimation = explosions.getFirstDead();
-        explosionAnimation.reset(player.x, player.y);
+        explosionAnimation.reset(ship.x, ship.y);
         explosionAnimation.play('kaboom', 30, false, true);
     }
 
@@ -130,7 +136,6 @@ function bulletHitPlayer (player, bullet) {
 
 function bulletHitEnemy (enemy, bullet) {
 
-    //console.log("hit");
 	bullet.kill();
 
     var destroyed = enemies[enemy.name].damage();
