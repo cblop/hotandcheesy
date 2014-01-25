@@ -2,6 +2,10 @@ function EnemyShip(game, x, y, bullets, player) {
 	Ship.call(this, game, x, y, bullets);
 	this.player = player;
 
+    this.preloader = function(game) {
+        game.load.atlas('enemy', 'assets/games/tanks/enemy-tanks.png', 'assets/games/tanks/tanks.json');
+    };
+
     this.update = function() {
 
         // Enemy AI goes here
@@ -70,5 +74,6 @@ function EnemyShip(game, x, y, bullets, player) {
         }
         game.physics.velocityFromRotation(this.ship.rotation, forwardSpeed, this.ship.body.velocity);
     }
-}
+
+};
 

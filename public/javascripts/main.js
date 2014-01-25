@@ -3,7 +3,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create
 
 function preload () {
 
-    game.load.atlas('player', 'assets/games/tanks/tanks.png', 'assets/games/tanks/tanks.json');
+    game.load.atlas('tank', 'assets/games/tanks/tanks.png', 'assets/games/tanks/tanks.json');
     game.load.atlas('enemy', 'assets/games/tanks/enemy-tanks.png', 'assets/games/tanks/tanks.json');
     game.load.image('bullet', 'assets/games/tanks/bullet.png');
     game.load.image('earth', 'assets/games/tanks/scorched_earth.png');
@@ -104,9 +104,9 @@ function update () {
     if (cursors.up.isDown)
     {
         //  The speed we'll travel at
-        this.currentSpeed = 304;
-    }
-
+        	player.currentSpeed = 304;
+	}
+    //  Our bullet group
 	player.update();
 
     land.tilePosition.x = -game.camera.x;

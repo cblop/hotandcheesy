@@ -29,11 +29,11 @@ function PlayerShip(game, x, y, bullets) {
 //I want this to be static to load atlas before initialising the player
 this.preloader = function(game) {
 	this.game.load.atlas('tank', 'assets/games/tanks/tanks.png', 'assets/games/tanks/tanks.json');
-}
+};
 
 this.turn = function(angle) {
 	this.tank.angle += angle;
-}
+};
 
 this.update = function() {
 	if(this.currentSpeed > 4){
@@ -51,9 +51,9 @@ this.update = function() {
 	this.turret.x = this.tank.x;
 	this.turret.y = this.tank.y;
 	
-	this.turret.rotation = game.physics.angleToPointer(this.turret);
+	this.turret.rotation = this.game.physics.angleToPointer(this.turret);
 
-}
+};
 
 this.fire = function fire (bullets) {
 
@@ -65,7 +65,7 @@ this.fire = function fire (bullets) {
 	    bullet.rotation = game.physics.moveToPointer(bullet, 1000);
 	}
 
-}
+};
 
 
 }
