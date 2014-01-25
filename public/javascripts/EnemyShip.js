@@ -7,6 +7,7 @@ function EnemyShip(index, game, x, y, bullets, player) {
     this.ship.name = index.toString();
     this.rotationSpeed = 0.1; // rad/update
     this.setSpeed = 100;
+    this.opponents = [player];
 	this.updateVelocity();
 
     this.preloader = function(game) {
@@ -17,27 +18,31 @@ function EnemyShip(index, game, x, y, bullets, player) {
 
         // Enemy AI goes here
 
-        //this.acquireTargets(this.player);
-        //this.prioritiseTargets();
+        this.prioritiseTargets();
+        this.checkAndFire();
         //this.engageTarget();
 
         this.turn(this.rotationSpeed);
 
-        if (this.game.physics.distanceBetween(this.ship, this.player) < 300)
+    };
+
+    this.checkAndFire = function()
+    {
+        // Check if we're within firing range and facing our target, if we are,
+        // shoot.
+        if ((this.game.physics.distanceBetween(this.ship, this.target.ship) < 300) && 
+            (Math.abs(this.game.physics.angleBetween(this.ship, this.target.ship) - this.ship.rotation) < 0.1))
         {
             this.fire();
         }
-
-    }
-
-    this.acquireTargets = function(newOpponents) {
-        this.opponents = newOpponents; 
-    }
+    };
 
     this.prioritiseTargets = function() {
         // 1) Check proximity
         //   - This is an analog for how threatening the opponent is
         var minIndex = -1;
+        this.target = this.opponents[0];
+        return;
         this.opponents.reduce(
                 function(prevVal, currentVal, index, array) {
                     res = distanceBetween(el.ship, this.ship);
