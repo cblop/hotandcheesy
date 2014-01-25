@@ -24,7 +24,8 @@ this.update = function(cursors) {
     if (cursors.up.isDown)
     {
         //  The speed we'll travel at
-        this.setSpeed(300);
+        //this.setSpeed(300);
+        this.accelerate(200);
     }
     else
     {

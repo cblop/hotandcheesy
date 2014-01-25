@@ -1,7 +1,7 @@
 function EnemyShip(index, game, x, y, bullets, player) {
 	Ship.call(this, game, game.add.sprite(x,y,'enemy','tank1'), bullets);
 	this.player = player;
-	this.ship.body.immovable = true;
+	this.ship.body.immovable = false;
 	this.ship.body.bounce.setTo(1, 1);
 	this.ship.angle = game.rnd.angle();
     this.ship.name = index.toString();

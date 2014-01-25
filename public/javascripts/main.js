@@ -21,6 +21,7 @@ var enemyBullets;
 var explosions;
 var cursors;
 var bullets;
+var circle;
 
 function create () {
 
@@ -73,18 +74,24 @@ function create () {
 
     cursors = game.input.keyboard.createCursorKeys();
 
+    circle = new Phaser.Circle(game.world.centerX, 100,64);
+
 }
 
 function update () {
 
     game.physics.collide(enemyBullets, player, bulletHitPlayer, null, this);
+    var result = false;
 
     for (var i = 0; i < enemies.length; i++)
     {
         if (enemies[i].alive)
         {
             enemies[i].update();
-            game.physics.collide(player.ship, enemies[i].ship);
+            result = game.physics.collide(player.ship, enemies[i].ship);
+
+            //game.physics.collide(player.ship, enemies[i].ship, shipsCollide, null, this);
+            //game.physics.collide(player.ship, enemies[i].ship, shipsCollide);
             game.physics.collide(bullets, enemies[i].ship, bulletHitEnemy, null, this);
         }
     }
@@ -99,12 +106,25 @@ function update () {
         //  Boom!
         player.fire();
     }
+    if (result) {
+        player.setSpeed(0);
+        player.updateVelocity();
+    }
 
 }
 
 function bulletHitPlayer (player, bullet) {
 
     bullet.kill();
+
+    var destroyed = player.damage();
+
+    if (destroyed)
+    {
+        var explosionAnimation = explosions.getFirstDead();
+        explosionAnimation.reset(player.x, player.y);
+        explosionAnimation.play('kaboom', 30, false, true);
+    }
 
 }
 
@@ -126,6 +146,6 @@ function bulletHitEnemy (enemy, bullet) {
 
 function render () {
 
-    // game.debug.renderText('Active Bullets: ' + bullets.countLiving() + ' / ' + bullets.total, 32, 32);
+    //game.debug.renderText('Active Bullets: ' + bullets.countLiving() + ' / ' + bullets.total, 32, 32);
 
 }
