@@ -129,7 +129,7 @@ function update () {
     }
 
     barback.drawRect(8, config.map.height - 8, 24, -104);
-    healthbar.drawRect(10, config.map.height - 10, 20, -100 + (100 - (player.health / maxHealth)));
+    healthbar.drawRect(10, config.map.height - 10, 20, -100 + (100 * (player.health / maxHealth)));
 
 
 }
