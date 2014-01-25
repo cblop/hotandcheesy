@@ -15,13 +15,11 @@ this.update = function(cursors) {
 
     if (cursors.left.isDown)
     {
-        this.turn(-0.1);
-    //    this.turn(-config.player.turnRate);
+        this.turn(-config.player.turnRate);
     }
     else if (cursors.right.isDown)
     {
-        this.turn(0.1);
-    //    this.turn(config.player.turnRate);
+        this.turn(config.player.turnRate);
     }
 
     if (cursors.up.isDown)
