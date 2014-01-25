@@ -1,6 +1,7 @@
 function PlayerShip(game, x, y, bullets) {
-	this = new Ship(game, x, y, bullets);
-	this.player = player;
+//	this.prototype = new Ship(game, x, y, bullets);
+	Ship.call(this,game,x,y,bullets);
+	this.player = this;
 	this.currentSpeed = 0;
 
 
@@ -24,46 +25,48 @@ function PlayerShip(game, x, y, bullets) {
 	this.tank.bringToTop();
 	this.turret.bringToTop();
 
-}
 
 //I want this to be static to load atlas before initialising the player
-PlayerShip.prototype.preloader = function(game) {
+this.preloader = function(game) {
 	this.game.load.atlas('tank', 'assets/games/tanks/tanks.png', 'assets/games/tanks/tanks.json');
 }
 
-PlayerShip.prototype.turn = function(angle) {
+this.turn = function(angle) {
 	this.tank.angle += angle;
 }
 
-PlayerShip.prototype.update = function() {
+this.update = function() {
 	if(this.currentSpeed > 4){
 		this.currentSpeed -= 4;
 	}else{
 		this.currentSpeed = 0;
 	}
-	this.game.physics.velocityFromRotation(tank.rotation, currentSpeed, tank.body.velocity);
+	this.game.physics.velocityFromRotation(this.tank.rotation, this.currentSpeed, this.tank.body.velocity);
 
 	//  Position all the parts and align rotations
-	shadow.x = tank.x;
-	shadow.y = tank.y;
-	shadow.rotation = tank.rotation;
+	this.shadow.x = this.tank.x;
+	this.shadow.y = this.tank.y;
+	this.shadow.rotation = this.tank.rotation;
 	
-	turret.x = tank.x;
-	turret.y = tank.y;
+	this.turret.x = this.tank.x;
+	this.turret.y = this.tank.y;
 	
-	turret.rotation = game.physics.angleToPointer(turret);
+	this.turret.rotation = game.physics.angleToPointer(this.turret);
 
 }
 
-PlayerShip.prototype.fire = function fire (bullets) {
+this.fire = function fire (bullets) {
 
-	if (game.time.now > this.nextFire && bullets.countDead() > 0)
+	if (this.game.time.now > this.nextFire && bullets.countDead() > 0)
 	{
-	    this.nextFire = game.time.now + this.fireRate;
+	    this.nextFire = this.game.time.now + this.fireRate;
 	    var bullet = bullets.getFirstDead();
-	    bullet.reset(turret.x, turret.y);
+	    bullet.reset(this.turret.x, this.turret.y);
 	    bullet.rotation = game.physics.moveToPointer(bullet, 1000);
 	}
+
+}
+
 
 }
 

@@ -3,7 +3,7 @@ var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create
 
 function preload () {
 
-    game.load.atlas('tank', 'assets/games/tanks/tanks.png', 'assets/games/tanks/tanks.json');
+    game.load.atlas('player', 'assets/games/tanks/tanks.png', 'assets/games/tanks/tanks.json');
     game.load.atlas('enemy', 'assets/games/tanks/enemy-tanks.png', 'assets/games/tanks/tanks.json');
     game.load.image('bullet', 'assets/games/tanks/bullet.png');
     game.load.image('earth', 'assets/games/tanks/scorched_earth.png');
@@ -35,8 +35,16 @@ function create () {
     land = game.add.tileSprite(0, 0, 800, 600, 'earth');
     land.fixedToCamera = true;
 
+
+     //  Our bullet group
+     bullets = game.add.group();
+     bullets.createMultiple(30, 'bullet');
+     bullets.setAll('anchor.x', 0.5);
+     bullets.setAll('anchor.y', 0.5);
+     bullets.setAll('outOfBoundsKill', true);
+
 	//Generate player
-	player = 
+	player = new PlayerShip(game, 400,300, bullets); 
     //  The enemies bullet group
     enemyBullets = game.add.group();
     enemyBullets.createMultiple(100, 'bullet');
@@ -49,15 +57,8 @@ function create () {
 
     for (var i = 0; i < 20; i++)
     {
-        enemies.push(new EnemyShip(game, game.world.randomX, game.world.randomY, enemyBullets, tank));
+        enemies.push(new EnemyShip(game, game.world.randomX, game.world.randomY, enemyBullets, player));
     }
-
-    //  Our bullet group
-    bullets = game.add.group();
-    bullets.createMultiple(30, 'bullet');
-    bullets.setAll('anchor.x', 0.5);
-    bullets.setAll('anchor.y', 0.5);
-    bullets.setAll('outOfBoundsKill', true);
 
     //  Explosion pool
     explosions = game.add.group();
@@ -69,7 +70,7 @@ function create () {
         explosionAnimation.animations.add('kaboom');
     }
 
-    game.camera.follow(tank);
+    game.camera.follow(player);
     game.camera.deadzone = new Phaser.Rectangle(150, 150, 500, 300);
     game.camera.focusOnXY(0, 0);
 
@@ -79,15 +80,15 @@ function create () {
 
 function update () {
 
-    game.physics.collide(enemyBullets, tank, bulletHitPlayer, null, this);
+    game.physics.collide(enemyBullets, player, bulletHitPlayer, null, this);
 
     for (var i = 0; i < enemies.length; i++)
     {
         if (enemies[i].alive)
         {
             enemies[i].update();
-            game.physics.collide(tank, enemies[i].tank);
-            game.physics.collide(bullets, enemies[i].tank, bulletHitEnemy, null, this);
+            game.physics.collide(player, enemies[i].player);
+            game.physics.collide(bullets, enemies[i].player, bulletHitEnemy, null, this);
         }
     }
 
@@ -114,27 +115,27 @@ function update () {
     if (game.input.activePointer.isDown)
     {
         //  Boom!
-        player.fire();
+        player.fire(bullets);
     }
 
 }
 
-function bulletHitPlayer (tank, bullet) {
+function bulletHitPlayer (player, bullet) {
 
     bullet.kill();
 
 }
 
-function bulletHitEnemy (tank, bullet) {
+function bulletHitEnemy (player, bullet) {
 
 	bullet.kill();
 
-    var destroyed = enemies[tank.name].damage();
+    var destroyed = enemies[player.name].damage();
 
     if (destroyed)
     {
         var explosionAnimation = explosions.getFirstDead();
-        explosionAnimation.reset(tank.x, tank.y);
+        explosionAnimation.reset(player.x, player.y);
         explosionAnimation.play('kaboom', 30, false, true);
     }
 

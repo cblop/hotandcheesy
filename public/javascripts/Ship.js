@@ -17,9 +17,7 @@ Ship = function(game, x, y, bullets) {
 
     game.physics.velocityFromRotation(this.ship.rotation, 100, this.ship.body.velocity);
 
-};
-
-Ship.prototype.damage = function() {
+this.damage = function() {
 
     this.health -= 1;
 
@@ -34,9 +32,11 @@ Ship.prototype.damage = function() {
 
     return false;
 
-}
+};
 
-Ship.prototype.update = function() {
+this.update = function() {
     // Player and enemy tanks do totally different things
+
+};
 
 };
