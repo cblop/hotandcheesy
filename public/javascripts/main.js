@@ -98,8 +98,10 @@ function create () {
     background.width = config.map.width;
     background.height = config.map.width;
     fireFilter = game.add.filter('Fire', config.map.width, config.map.height);
+    lightFilter = game.add.filter('Light', config.map.width, config.map.height);
     fireFilter.alpha = 0.0;
-    background.filters = [fireFilter];
+    lightFilter.alpha = 0.0;
+    background.filters = [lightFilter];
 
 
 }
@@ -142,7 +144,18 @@ function update () {
     barback.drawRect(8, config.map.height - 8, 24, -104);
     healthbar.drawRect(10, config.map.height - 10, 20, -100 + (100 * (player.health / config.player.health)));
 
-    fireFilter.update();
+    /*
+    for (var i = 0; i < config.bullet.playerNumber; i++) {
+
+
+    }
+    */
+
+    //console.log(bullets.getAt(0).x);
+    //lightFilter.update(bullets.getAt(0).x, bullets.getAt(0).y);
+    lightFilter.xpos = bullets.getAt(0).x;
+    lightFilter.ypos = config.map.height - bullets.getAt(0).y;
+    lightFilter.update();
 
 
 }
