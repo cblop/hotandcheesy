@@ -9,7 +9,6 @@ function PlayerShip(game, x, y, bullets) {
 	this.tank = game.add.sprite(0, 0, 'tank', 'tank1');
 	this.tank.anchor.setTo(0.5, 0.5);
 	this.tank.animations.add('move', ['tank1', 'tank2', 'tank3', 'tank4', 'tank5', 'tank6'], 20, true);
-	// tank.play('move');
 	//  This will force it to decelerate and limit its speed
 	this.tank.body.drag.setTo(200, 200);
 	this.tank.body.maxVelocity.setTo(400, 400);
