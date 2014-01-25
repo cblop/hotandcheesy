@@ -55,7 +55,7 @@ PlayerShip.prototype.update = function() {
 
 }
 
-PlayerShip.prototype.fire = 143 function fire (bullets) {
+PlayerShip.prototype.fire = function fire (bullets) {
 
 	if (game.time.now > this.nextFire && bullets.countDead() > 0)
 	{
