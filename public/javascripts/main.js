@@ -1,4 +1,3 @@
-var maxHealth = 30;
 var game = new Phaser.Game(config.map.width, config.map.height, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
 // var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
@@ -129,7 +128,7 @@ function update () {
     }
 
     barback.drawRect(8, config.map.height - 8, 24, -104);
-    healthbar.drawRect(10, config.map.height - 10, 20, -100 + (100 * (player.health / maxHealth)));
+    healthbar.drawRect(10, config.map.height - 10, 20, -100 + (100 * (player.health / config.player.health)));
 
 
 }
