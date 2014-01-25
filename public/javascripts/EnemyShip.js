@@ -1,6 +1,6 @@
 function EnemyShip(game, x, y, bullets, player) {
-	Ship.call(this, game, x, y, bullets);
-	this.player = player;
+    Ship.call(this, game, x, y, bullets);
+    this.player = player;
 
     this.preloader = function(game) {
         game.load.atlas('enemy', 'assets/games/tanks/enemy-tanks.png', 'assets/games/tanks/tanks.json');
@@ -9,6 +9,10 @@ function EnemyShip(game, x, y, bullets, player) {
     this.update = function() {
 
         // Enemy AI goes here
+
+        //this.acquireTargets(this.player);
+        //this.prioritiseTargets();
+        //this.engageTarget();
 
         if (this.game.physics.distanceBetween(this.ship, this.player) < 300)
         {
@@ -27,7 +31,7 @@ function EnemyShip(game, x, y, bullets, player) {
     }
 
     this.acquireTargets = function(newOpponents) {
-        this.opponents = opponents; 
+        this.opponents = newOpponents; 
     }
 
     this.prioritiseTargets = function() {
@@ -58,7 +62,7 @@ function EnemyShip(game, x, y, bullets, player) {
         return true;
     }
 
-    this.adjustMovement = function() {
+    this.engageTarget = function() {
         // We adjust rotation in increments of 0.1rads each time this function is
         // called. The rotation is simply to point us at our target.
         var rotationSpeed = 0.1; // rad/update
