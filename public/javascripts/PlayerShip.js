@@ -1,9 +1,9 @@
 function PlayerShip(game, x, y, bullets, cursors) {
 	Ship.call(this,game,game.add.sprite(x,y,'player'),bullets);
-	this.fireRate = 50;
-    this.health = 30;
+	this.fireRate = config.player.fireRate;
+	    this.health = config.player.health;
 	//  This will force it to decelerate and limit its speed
-	this.ship.body.drag.setTo(200, 200);
+	this.ship.body.drag.setTo(config.player.dragX, config.player.dragY);
 
 
 //I want this to be static to load atlas before initialising the player
@@ -15,22 +15,22 @@ this.update = function(cursors) {
 
     if (cursors.left.isDown)
     {
-        this.turn(-0.06);
+        this.turn(-config.player.turnRate);
     }
     else if (cursors.right.isDown)
     {
-        this.turn(0.06);
+        this.turn(config.player.turnRate);
     }
 
     if (cursors.up.isDown)
     {
         //  The speed we'll travel at
         //this.setSpeed(300);
-        this.accelerate(200);
+        this.accelerate(config.player.acceleration);
     }
     else
     {
-            this.accelerate(-4);
+            this.accelerate(config.player.decleration);
     }
 
     if (this.currentSpeed > 0)
