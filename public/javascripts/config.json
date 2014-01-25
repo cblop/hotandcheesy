@@ -12,7 +12,7 @@ var config = {
 			"startX": 50, "startY": 50,
 			"fireRate": 50, "health": 30,
 			"dragX": 200, "dragY": 200,
-			"turnrate": 0.06, "acceleration": 200, "decceleration": -4,
+			"turnRate": 0.06, "acceleration": 200, "decceleration": -4,
 			
 		 },
 	"friendy": {},
