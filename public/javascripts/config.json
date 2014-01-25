@@ -3,8 +3,17 @@ var config = {
 	"bullet": {	"friendlyNumber": 100, "enemyNumber": 100, "playerNumber":30,
 			"explosionNumber":10, 
 		},
+	"ship": {	"fireRate": 1000,
+			"health": 1,
+			"maxVelX": 400, "maxVelY": 400,
+
+		},
 	"player": {	"maxSpeed": 100,"maxTurn": 0.06,
 			"startX": 50, "startY": 50,
+			"fireRate": 50, "health": 30,
+			"dragX": 200, "dragY": 200,
+			"turnrate": 0.06, "acceleration": 200, "decceleration": -4,
+			
 		 },
 	"friendy": {},
 	"enemy": {	"number": 20},
