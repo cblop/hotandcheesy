@@ -110,7 +110,7 @@ function update () {
     if (game.input.activePointer.isDown)
     {
         //  Boom!
-        player.fire(bullets);
+        player.fire();
     }
 
 }

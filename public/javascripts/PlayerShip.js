@@ -3,7 +3,7 @@ function PlayerShip(game, x, y, bullets) {
 	Ship.call(this,game,x,y,bullets);
 	this.player = this;
 	this.currentSpeed = 0;
-
+	this.fireRate = 50;
 
 	//  The base of our tank
 	this.tank = game.add.sprite(0, 0, 'tank', 'tank1');
@@ -13,16 +13,12 @@ function PlayerShip(game, x, y, bullets) {
 	this.tank.body.drag.setTo(200, 200);
 	this.tank.body.maxVelocity.setTo(400, 400);
 	this.tank.body.collideWorldBounds = true;
-	//  Finally the turret that we place on-top of the tank body
-	this.turret = game.add.sprite(0, 0, 'tank', 'turret');
-	this.turret.anchor.setTo(0.3, 0.5);
 	
 	//  A shadow below our tank
 	this.shadow = game.add.sprite(0, 0, 'tank', 'shadow');
 	this.shadow.anchor.setTo(0.5, 0.5);
 
 	this.tank.bringToTop();
-	this.turret.bringToTop();
 
 
 //I want this to be static to load atlas before initialising the player
@@ -46,22 +42,18 @@ this.update = function() {
 	this.shadow.x = this.tank.x;
 	this.shadow.y = this.tank.y;
 	this.shadow.rotation = this.tank.rotation;
-	
-	this.turret.x = this.tank.x;
-	this.turret.y = this.tank.y;
-	
-	this.turret.rotation = this.game.physics.angleToPointer(this.turret);
 
 };
 
-this.fire = function fire (bullets) {
+this.fire = function fire () {
 
-	if (this.game.time.now > this.nextFire && bullets.countDead() > 0)
+	if (this.game.time.now > this.nextFire && this.bullets.countDead() > 0)
 	{
 	    this.nextFire = this.game.time.now + this.fireRate;
 	    var bullet = bullets.getFirstDead();
-	    bullet.reset(this.turret.x, this.turret.y);
-	    bullet.rotation = game.physics.moveToPointer(bullet, 1000);
+	    bullet.reset(this.tank.x, this.tank.y);
+	    bullet.rotation = this.tank.rotation;
+		this.game.physics.velocityFromRotation(this.tank.rotation, 1000, bullet.body.velocity);
 	}
 
 };

@@ -6,6 +6,9 @@ Ship = function(game, x, y, bullets) {
 	this.currentSpeed = 0;
 	this.alive = true;
 	this.health = 1;
+	this.allies = [];
+	this.enemies = [];
+
 
 	this.damage = function() {
 	    this.health -= 1;
