@@ -1,4 +1,6 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
+var gameWidth = 1024;
+var gameHeight = 768;
+var game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
 // var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
 function preload () {
@@ -23,13 +25,24 @@ var cursors;
 var bullets;
 var circle;
 
+var healthbar;
+var barback;
+
 function dSpace(e){if((e.keyCode==32)&&(!e.shiftKey)){e.preventDefault();}}
 window.addEventListener('keydown',dSpace,true);void 0;
+
 
 function create () {
 
     //  Resize our game world to be a 2000 x 2000 square
-    game.world.setBounds(0,0,800,600);
+    game.world.setBounds(0,0,gameWidth,gameHeight);
+
+    barback = game.add.graphics(0, 0);
+    healthbar = game.add.graphics(0, 0);
+    barback.lineStyle(2, 0xFFFFFF, 1); // width, color (0x0000FF), alpha (0 -> 1) // required settings
+    healthbar.lineStyle(2, 0x00FF00, 1); // width, color (0x0000FF), alpha (0 -> 1) // required settings
+    barback.beginFill(0x000000, 1);
+    healthbar.beginFill(0x00FF00, 1);
 
 
     //  Our tiled scrolling background
@@ -93,7 +106,8 @@ function update () {
         if (enemies[i].alive)
         {
             enemies[i].update();
-            result = game.physics.collide(player.ship, enemies[i].ship);
+            //result = game.physics.collide(player.ship, enemies[i].ship);
+            game.physics.collide(player.ship, enemies[i].ship, shipsCollide, null, this);
 
             //game.physics.collide(player.ship, enemies[i].ship, shipsCollide, null, this);
             //game.physics.collide(player.ship, enemies[i].ship, shipsCollide);
@@ -116,13 +130,37 @@ function update () {
         player.updateVelocity();
     }
 
+    barback.drawRect(10, gameHeight - 10, 50, -100);
+    healthbar.drawRect(10, gameHeight - 10, 50, -100);
+
+
+}
+
+function shipsCollide (shipA, shipB) {
+    console.log("collide");
+
+    var destroyedA = player.damage(1);
+    var destroyedB = enemies[shipB.name].damage(1);
+
+    if (destroyedA)
+    {
+        var explosionAnimation = explosions.getFirstDead();
+        explosionAnimation.reset(shipA.x, shipA.y);
+        explosionAnimation.play('kaboom', 30, false, true);
+    }
+    else if (destroyedB)
+    {
+        var explosionAnimation = explosions.getFirstDead();
+        explosionAnimation.reset(shipB.x, shipB.y);
+        explosionAnimation.play('kaboom', 30, false, true);
+    }
 }
 
 function bulletHitPlayer (ship, bullet) {
 
     bullet.kill();
 
-    var destroyed = player.damage();
+    var destroyed = player.damage(2);
     console.log(destroyed);
 
     if (destroyed)
@@ -138,7 +176,7 @@ function bulletHitEnemy (enemy, bullet) {
 
 	bullet.kill();
 
-    var destroyed = enemies[enemy.name].damage();
+    var destroyed = enemies[enemy.name].damage(4);
 
     if (destroyed)
     {

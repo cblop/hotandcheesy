@@ -7,7 +7,7 @@ Ship = function(game, sprite, bullets) {
 	this.nextFire = 0;
 	this.currentSpeed = 0;
 	this.alive = true;
-	this.health = 5;
+	this.health = 10;
 	this.allies = [];
 	this.enemies = [];
 	
@@ -57,8 +57,8 @@ Ship = function(game, sprite, bullets) {
 
 	}
 
-	this.damage = function() {
-	    this.health -= 1;
+	this.damage = function(amount) {
+	    this.health -= amount;
 	    if (this.health <= 0)
 	    {
 	        this.alive = false;
