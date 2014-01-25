@@ -10,6 +10,10 @@ function EnemyShip(index, game, x, y, bullets, player) {
     this.opponents = [player];
 	this.updateVelocity();
 
+    // Private variables
+    var firingDistance = 300; // Number.POSITIVE_INFINITY
+    var firingAngle = 0.1; // Radians
+
     this.preloader = function(game) {
         game.load.atlas('enemy', 'assets/games/tanks/enemy-tanks.png', 'assets/games/tanks/tanks.json');
     };
@@ -30,8 +34,8 @@ function EnemyShip(index, game, x, y, bullets, player) {
     {
         // Check if we're within firing range and facing our target, if we are,
         // shoot.
-        if ((this.game.physics.distanceBetween(this.ship, this.target.ship) < 300) && 
-            (Math.abs(this.game.physics.angleBetween(this.ship, this.target.ship) - this.ship.rotation) < 0.1))
+        if ((this.game.physics.distanceBetween(this.ship, this.target.ship) < firingDistance) && 
+            (Math.abs(this.game.physics.angleBetween(this.ship, this.target.ship) - this.ship.rotation) < firingAngle))
         {
             this.fire();
         }
