@@ -1,0 +1,12 @@
+var config = {
+	"map": {	"width": 1200, "height": 400},
+	"bullet": {	"friendlyNumber": 100, "enemyNumber": 100, "playerNumber":30,
+			"explosionNumber":10, 
+		},
+	"player": {	"maxSpeed": 100,"maxTurn": 0.06,
+			"startX": 50, "startY": 50,
+		 },
+	"friendy": {},
+	"enemy": {	"number": 20},
+};
+

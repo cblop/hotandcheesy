@@ -1,4 +1,4 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
+var game = new Phaser.Game(config.map.width, config.map.height, Phaser.AUTO, '', { preload: preload, create: create, update: update, render: render });
 // var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
 function preload () {
@@ -25,7 +25,7 @@ var bullets;
 function create () {
 
     //  Resize our game world to be a 2000 x 2000 square
-    game.world.setBounds(0,0,800,600);
+    game.world.setBounds(0,0,config.map.width,config.map.height);
 
     //  Our tiled scrolling background
     //land = game.add.tileSprite(0, 0, 800, 600, 'earth');
@@ -34,17 +34,18 @@ function create () {
 
      //  Our bullet group
      bullets = game.add.group();
-     bullets.createMultiple(30, 'bullet');
+     bullets.createMultiple(config.bullet.playerNumber, 'bullet');
      bullets.setAll('anchor.x', 0.5);
      bullets.setAll('anchor.y', 0.5);
      bullets.setAll('outOfBoundsKill', true);
 
     cursors = game.input.keyboard.createCursorKeys();
 	//Generate player
-	player = new PlayerShip(game, 50, 50, bullets, cursors); 
+	player = new PlayerShip(game, config.player.startX, config.player.startY, bullets, cursors); 
+
     //  The enemies bullet group
     enemyBullets = game.add.group();
-    enemyBullets.createMultiple(100, 'bullet');
+    enemyBullets.createMultiple(config.bullet.enemyNumber, 'bullet');
     enemyBullets.setAll('anchor.x', 0.5);
     enemyBullets.setAll('anchor.y', 0.5);
     enemyBullets.setAll('outOfBoundsKill', true);
@@ -52,7 +53,7 @@ function create () {
     //  Create some baddies to waste :)
     enemies = [];
 
-    for (var i = 0; i < 20; i++)
+    for (var i = 0; i < config.enemy.number; i++)
     {
         enemies.push(new EnemyShip(game, game.world.randomX, game.world.randomY, enemyBullets, player));
     }
@@ -60,15 +61,13 @@ function create () {
     //  Explosion pool
     explosions = game.add.group();
 
-    for (var i = 0; i < 10; i++)
+    for (var i = 0; i < config.bullet.explosionNumber; i++)
     {
         var explosionAnimation = explosions.create(0, 0, 'kaboom', [0], false);
         explosionAnimation.anchor.setTo(0.5, 0.5);
         explosionAnimation.animations.add('kaboom');
     }
 
-    game.camera.follow(player);
-    game.camera.deadzone = new Phaser.Rectangle(150, 150, 500, 300);
     game.camera.focusOnXY(0, 0);
 
     cursors = game.input.keyboard.createCursorKeys();
@@ -79,7 +78,7 @@ function update () {
 
     game.physics.collide(enemyBullets, player, bulletHitPlayer, null, this);
 
-    for (var i = 0; i < enemies.length; i++)
+    for (var i = 0; i < config.enemy.number; i++)
     {
         if (enemies[i].alive)
         {
