@@ -1,7 +1,8 @@
 var config = {
 	"map": {	
         "width": 1200, 
-        "height": 400,
+        "height": 600,
+		"lightsOn": 0,
 		},
 
 	"bullet": {	
@@ -25,7 +26,7 @@ var config = {
         "startX":           150,
         "startY":           450,
         "fireRate":         50, 
-        "health":           400,
+        "health":           20,
         "dragX":            200, 
         "dragY":            200,
         "turnRate":         0.06, 
@@ -34,16 +35,16 @@ var config = {
         },
 
 	"friend": {	
-        "number":           3,
+        "number":           5,
         },
 
 	"enemy": {	
-        "number":           6,
+        "number":           20,
         },
 
          "collide": {"playerHitsEnemy": 1, "playerHitsFriend": 1, "playerHitsPlayer": 1,
-                 "friendHitsEnemy": 1, "friendHitsFriend": 1, "friendHitsPlayer": 1,
-                 "enemyHitsEnemy": 1, "enemyHitsFriend": 1, "enemyHitsPlayer": 1},
+                 "friendHitsEnemy": 1, "friendHitsFriend": 0, "friendHitsPlayer": 1,
+                 "enemyHitsEnemy": 0, "enemyHitsFriend": 1, "enemyHitsPlayer": 1},
          "fire": {"playerShootsEnemy": 1, "playerShootsFriend": 1, "playerShootsPlayer": 1,
                   "friendShootsEnemy": 1, "friendShootsFriend": 1, "friendShootsPlayer": 1,
                   "enemyShootsEnemy": 1, "enemyShootsFriend": 1, "enemyShootsPlayer": 1},
@@ -56,5 +57,6 @@ var config = {
         "shotNumberWeight": 1,
         "proximityWeight":  1000,
         }
+		
 };
 

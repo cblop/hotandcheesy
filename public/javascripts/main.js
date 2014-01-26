@@ -84,7 +84,10 @@ function create () {
     enemies = [];
     for (var i = 0; i < config.enemy.number; i++)
     {
-        enemies.push(new EnemyShip(i, game, game.world.randomX, game.world.randomY, enemyBullets, player));
+        //enemies in random positions
+		//enemies.push(new EnemyShip(i, game, game.world.randomX, game.world.randomY, enemyBullets, player));
+		//Enemies down right hand side
+		enemies.push(new EnemyShip(i, game, game.world.width - 50, game.world.randomY, enemyBullets, player));
         //enemies[i].ship.filters = [lightFilter];
     }
 	
@@ -97,13 +100,16 @@ function create () {
     friendBullets.setAll('outOfBoundsKill', true);
     friends = [];
     for (var i = 0; i < config.friend.number; i++) {
-        friends.push(new FriendlyShip(i, game, game.world.randomX, game.worldrandomY, friendBullets, player));
+       //Friens in random positions
+	   //friends.push(new FriendlyShip(i, game, game.world.randomX, game.worldrandomY, friendBullets, player));
+       //friends down left hand side
+	   friends.push(new FriendlyShip(i, game, 50, game.world.randomY, friendBullets, player));
     }
 
     for(var i=0; i<config.enemy.number; i++) {
         enemies[i].setOpponents(friends);
         enemies[i].setAllies(enemies);
-        //enemies[i].pushOpponent(player);
+        enemies[i].pushOpponent(player);
     }
     for(var i=0; i<config.friend.number; i++) {
         friends[i].setOpponents(enemies);
@@ -126,19 +132,16 @@ function create () {
     background.width = config.map.width;
     background.height = config.map.width;
 
-    lightFilter = game.add.filter('Light', config.map.width, config.map.height);
+    if(config.map.lightsOn == "1")
+	{
+	lightFilter = game.add.filter('Light', config.map.width, config.map.height);
     lightFilter.alpha = 1.0;
     lightFilter.red = 1.0;
     lightFilter.green = 1.0;
     lightFilter.blue = 2.0;
 
-    //renderGroup.add(enemies);
-    //renderGroup.add(explosions);
-    //background.filters = playerLights;
     background.filters = [lightFilter];
-
-
-
+	}
 }
 
 function update () {
@@ -204,9 +207,13 @@ function update () {
 
     //console.log(bullets.getAt(0).x);
     //lightFilter.update(bullets.getAt(0).x, bullets.getAt(0).y);
-    lightFilter.xpos = bullets.getAt(0).x;
-    lightFilter.ypos = config.map.height - bullets.getAt(0).y;
-    lightFilter.update();
+
+	if(config.map.lightsOn == "1")
+	{
+		lightFilter.xpos = bullets.getAt(0).x;
+		lightFilter.ypos = config.map.height - bullets.getAt(0).y;
+		lightFilter.update();
+	}
 
     healthbar.y = config.map.height - healthBarHeight - 10 + 100 * (1 - (player.health / config.player.health));
     healthbar.scale.y = (player.health / config.player.health);
@@ -221,7 +228,7 @@ function update () {
 }
 
 function shipsCollide (shipA, shipB) {
-    console.log("collide");
+    //console.log("collide");
 
     var shipA = identifyShip(shipA.shipType, shipA.index);
     var shipB = identifyShip(shipB.shipType, shipB.index);
@@ -259,7 +266,7 @@ function bulletHitShip (ship, bullet) {
 	ship = identifyShip(ship.shipType, ship.index);
 	var dam = bulletDamage(ship.ship.shipType, bullet.group.shipType);
 	var destroyed = ship.damage(dam);
-	console.log(destroyed);
+	//console.log(destroyed);
 	if(destroyed){
 		var explosionAnimation = explosions.getFirstDead();
 		explosionAnimation.reset(ship.ship.x, ship.ship.y);

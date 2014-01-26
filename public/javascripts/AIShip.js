@@ -24,7 +24,7 @@ function AIShip(game, sprite, bullets, player) {
 
     this.update = function() 
     {
-        this.prioritiseTargets();
+        this.selectTarget();
         this.decideStrategy();
         this.checkAndFire();
     };
@@ -38,6 +38,7 @@ function AIShip(game, sprite, bullets, player) {
     {
         if (this.target == null)
         {
+            alert("Got a null target!");
         }
         else if (this.distanceToTarget() < evasionDistance)
         {
@@ -74,7 +75,7 @@ function AIShip(game, sprite, bullets, player) {
         }
     };
 
-    this.prioritiseTargets = function() {
+    this.selectTarget = function() {
         // Gets rid of any invalid opponents. We don't save this filtered array
         // because our logic for filtering will probably change later
         var filterFunc = function(el, index, arr)
@@ -89,19 +90,22 @@ function AIShip(game, sprite, bullets, player) {
             return (proximityWeight / this.game.physics.distanceBetween(el.ship, thisref.ship)
                  + (shotNumberWeight * el.ship.numberOfShots));
         };
+        console.log(filteredOpponents);
+        console.log(filteredOpponents.length);
         if (filteredOpponents && filteredOpponents.length > 0)
         {
-            var maxScoreIndex = this.opponents
+            var maxScoreIndex = filteredOpponents
                 .map(scoreFunc)
                 .reduce(function(prevVal, currVal, ind, arr)
                     { return (arr[currVal] > arr[prevVal]) ? currVal : prevVal; }
                 , 0);
-            this.target = this.opponents[maxScoreIndex];
+            this.target = filteredOpponents[maxScoreIndex];
         }
         else
         {
             this.target = null;
         }
+        console.log(this.target);
         // return minIndex;
         // 3) If there are friendly obstacles between this ship and the opponent,
         //   remove the opponent from the list of options
