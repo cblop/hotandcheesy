@@ -154,7 +154,7 @@ function create () {
                      "illuminates a path, it also draw the attention of the enemies.", 10, 0,
                      function() { splashText(game, "Use the arrow keys to move, space-bar to shoot.", 5, 0); }
                      ); */
-     function() { splashText(game, "Use the arrow keys to move, space-bar to shoot.", 5, 0); }
+     splashText(game, "Use the arrow keys to move, space-bar to shoot.", 5, 0);
 }
 
 function beginNewGame(ln)
@@ -203,7 +203,7 @@ function update () {
 //game over
 	if(player.alive == false)
 	{
-		levelNumber = config.enemy.number;
+		levelNumber = 1;
 		beginNewGame(levelNumber);
         splashText(game, "You LOSE. Back to level " + levelNumber, 2, 0, null);
 	}
@@ -219,7 +219,8 @@ function update () {
 	if(allEnemiesDead)
 	{
 		beginNewGame(levelNumber*=2);
-        splashText(game, "Sweet. Onto level " + levelNumber, 2, 0, null);
+
+        splashText(game, "Sweet. Onto " + levelNumber + " enemies.", 2, 0, null);
 	}
 
     var result = false;
@@ -340,13 +341,15 @@ function shipsCollide (shipA, shipB) {
 
     if (destroyedA)
     {
-        var explosionAnimation = explosions.getFirstDead();
+
+        var explosionAnimation = explosions.getFirstDead() || explosions.getFirstAlive();
         explosionAnimation.reset(shipA.ship.x, shipA.ship.y);
         explosionAnimation.play('kaboom', 30, false, true);
     }
     else if (destroyedB)
     {
-        var explosionAnimation = explosions.getFirstDead();
+
+        var explosionAnimation = explosions.getFirstDead() || explosions.getFirstAlive();
         explosionAnimation.reset(shipB.ship.x, shipB.ship.y);
         explosionAnimation.play('kaboom', 30, false, true);
     }
@@ -374,7 +377,9 @@ function bulletHitShip (ship, bullet) {
 	var destroyed = ship.damage(dam, game.physics.angleBetween(ship.ship, bullet));
 	//console.log(destroyed);
 	if(destroyed){
-		var explosionAnimation = explosions.getFirstDead();
+
+		var explosionAnimation = explosions.getFirstDead() || explosions.getFirstAlive();
+
 		explosionAnimation.reset(ship.ship.x, ship.ship.y);
 		explosionAnimation.play('kaboom', 30, false, true);
 	}
