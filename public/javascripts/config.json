@@ -19,5 +19,12 @@ var config = {
 		 },
 	"friend": {	"number": 3,},
 	"enemy": {	"number": 6,},
+	"collide": {"playerHitsEnemy": 1, "playerHitsFriend": 1, "playerHitsPlayer": 1,
+		"friendHitsEnemy": 1, "friendHitsFriend": 1, "friendHitsPlayer": 1,
+		"enemyHitsEnemy": 1, "enemyHitsFriend": 1, "enemyHitsPlayer": 1},
+	"fire": {"playerShootsEnemy": 1, "playerShootsFriend": 1, "playerShootsPlayer": 1,
+                 "friendShootsEnemy": 1, "friendShootsFriend": 1, "friendShootsPlayer": 1,
+                 "enemyShootsEnemy": 1, "enemyShootsFriend": 1, "enemyShootsPlayer": 1},
+ 
 };
 

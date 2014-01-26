@@ -20,6 +20,7 @@ var player;
 
 var enemies;
 var enemyBullets;
+var friendBullets;
 var explosions;
 var cursors;
 var bullets;
@@ -54,6 +55,7 @@ function create () {
 
     //  Our bullet group
     bullets = game.add.group();
+	bullets.shipType = "player";
     bullets.createMultiple(config.bullet.playerNumber, 'bullet');
     bullets.setAll('anchor.x', 0.5);
     bullets.setAll('anchor.y', 0.5);
@@ -65,6 +67,7 @@ function create () {
 
     //  The enemies bullet group
     enemyBullets = game.add.group();
+	enemyBullets.shipType = "enemy";
     enemyBullets.createMultiple(config.bullet.enemyNumber, 'bullet');
     enemyBullets.setAll('anchor.x', 0.5);
     enemyBullets.setAll('anchor.y', 0.5);
@@ -80,6 +83,7 @@ function create () {
 	
     // Create some friends to help :)
     friendBullets = game.add.group();
+	friendBullets.shipType = "friend";
     friendBullets.createMultiple(config.bullet.friendNumber, 'bullet');
     friendBullets.setAll('anchor.x', 0.5);
     friendBullets.setAll('anchor.y', 0.5);
@@ -128,6 +132,8 @@ function update () {
     var result = false;
 
     game.physics.collide(enemyBullets, player.ship, bulletHitShip, null, this);
+	game.physics.collide(friendBullets, player.ship, bulletHitShip, null, this);
+	game.physics.collide(bullets, player.ship, bulletHitShip, null, this);
 
     for (var i = 0; i < config.enemy.number; i++)
     {
@@ -136,17 +142,29 @@ function update () {
             enemies[i].update();
             //result = game.physics.collide(player.ship, enemies[i].ship);
             game.physics.collide(player.ship, enemies[i].ship, shipsCollide, null, this);
-
+		for(var j=0; j<config.friend.number;j++){
+			game.physics.collide(friends[j].ship, enemies[i].ship, shipsCollide, null, this);
+		}
+		for(var j=0; j<i; j++){
+			game.physics.collide(enemies[j].ship, enemies[i].ship, shipsCollide, null, this);
+		}
             //game.physics.collide(player.ship, enemies[i].ship, shipsCollide, null, this);
             //game.physics.collide(player.ship, enemies[i].ship, shipsCollide);
             game.physics.collide(bullets, enemies[i].ship, bulletHitShip, null, this);
+		game.physics.collide(friendBullets, enemies[i].ship, bulletHitShip, null, this);
+		game.physics.collide(enemyBullets, enemies[i].ship, bulletHitShip, null, this);
         }
     }
     for (var i=0; i<config.friend.number; i++){
 	if(friends[i].alive){
 		friends[i].update();
+		for(var j=0; j<i; j++){
+			game.physics.collide(friends[j].ship, friends[i].ship, shipsCollide, null, this);
+		}
 		game.physics.collide(player.ship, friends[i].ship, shipsCollide, null, this);
 		game.physics.collide(bullets, friends[i].ship, bulletHitShip, null, this);
+		game.physics.collide(friendBullets, friends[i].ship, bulletHitShip, null, this);
+		game.physics.collide(enemyBullets, friends[i].ship, bulletHitShip, null, this);
 	}
     }
 
@@ -181,8 +199,8 @@ function shipsCollide (shipA, shipB) {
 
     var shipA = identifyShip(shipA.shipType, shipA.index);
     var shipB = identifyShip(shipB.shipType, shipB.index);
-	var destroyedA = shipA.damage(1);
-	var destroyedB = shipB.damage(1);
+	var destroyedA = shipA.damage(collideDamage(shipA.ship.shipType, shipB.ship.shipType));
+	var destroyedB = shipB.damage(collideDamage(shipB.ship.shipType, shipA.ship.shipType));
 
     if (destroyedA)
     {
@@ -213,16 +231,7 @@ function identifyShip(shipType, index) {
 function bulletHitShip (ship, bullet) {
 	bullet.kill();
 	ship = identifyShip(ship.shipType, ship.index);
-	var dam;
-         if (ship.ship.shipType === "player") {
-                 dam = 1;
-         }else if (ship.ship.shipType === "friend") {
-                 dam = 1;
-         }else if (ship.ship.shipType === "enemy") {
-                 dam = 1;
-         }else{
-                 console.error('spelling mistake');
-         }
+	var dam = bulletDamage(ship.ship.shipType, bullet.group.shipType);
 	var destroyed = ship.damage(dam);
 	console.log(destroyed);
 	if(destroyed){
@@ -237,4 +246,80 @@ function render () {
 
     //game.debug.renderText('Active Bullets: ' + bullets.countLiving() + ' / ' + bullets.total, 32, 32);
 
+}
+
+function bulletDamage(damaged, damager){
+	if(damaged === "player"){
+		if(damager === "player"){
+			return config.fire.playerShootsPlayer;
+		}else if(damager === "friend"){
+			return config.fire.friendShootsPlayer;
+		}else if(damager === "enemy"){
+			return config.fire.enemyShootsPlayer;
+		}else{
+			console.error('spelling mistake');
+		}
+	}else if(damaged === "friend"){
+                if(damager === "player"){
+                        return config.fire.playerShootsFriend;
+                }else if(damager === "friend"){
+                        return config.fire.friendShootsFriend;
+                }else if(damager === "enemy"){
+                        return config.fire.enemyShootsFriend;
+                }else{
+                        console.error('spelling mistake');
+                }
+
+	}else if(damaged === "enemy"){
+                if(damager === "player"){
+                        return config.fire.playerShootsEnemy;
+                }else if(damager === "friend"){
+                        return config.fire.friendShootsEnemy;
+                }else if(damager === "enemy"){
+                        return config.fire.enemyShootsEnemy;
+                }else{
+                        console.error('spelling mistake');
+                }
+
+	}else{
+		console.error("Spelling mistake");
+	}	
+}
+
+function collideDamage(damaged, damager){
+        if(damaged === "player"){
+                if(damager === "player"){
+                        return config.collide.playerHitsPlayer;
+                }else if(damager === "friend"){
+                        return config.collide.friendHitsPlayer;
+                }else if(damager === "enemy"){
+                        return config.collide.enemyHitsPlayer;
+                }else{
+                        console.error('spelling mistake');
+                }
+        }else if(damaged === "friend"){
+                if(damager === "player"){
+                        return config.collide.playerHitsFriend;
+                }else if(damager === "friend"){
+                        return config.collide.friendHitsFriend;
+                }else if(damager === "enemy"){
+                        return config.collide.enemyHitsFriend;
+                }else{
+                        console.error('spelling mistake');
+                }
+
+        }else if(damaged === "enemy"){
+                if(damager === "player"){
+                        return config.collide.playerHitsEnemy;
+                }else if(damager === "friend"){
+                        return config.collide.friendHitsEnemy;
+                }else if(damager === "enemy"){
+                        return config.collide.enemyHitsEnemy;
+                }else{
+                        console.error('spelling mistake');
+                }
+
+        }else{
+                console.error("Spelling mistake");
+        }
 }
