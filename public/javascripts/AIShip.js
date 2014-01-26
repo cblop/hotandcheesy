@@ -1,10 +1,9 @@
-function AIShip(index, game, sprite, bullets, player) {
+function AIShip(game, sprite, bullets, player) {
 	Ship.call(this, game, sprite, bullets);
 	this.player = player;
 	this.ship.body.immovable = false;
 	this.ship.body.bounce.setTo(1, 1);
 	this.ship.angle = game.rnd.angle();
-    this.ship.name = index.toString();
     this.rotationSpeed = 0.1; // rad/update
     this.setSpeed(100);
     this.opponents = [];
@@ -14,12 +13,12 @@ function AIShip(index, game, sprite, bullets, player) {
     var thisref = this;
 
     // Private variables
-    var firingDistance = 800;   // The distance within which a target will be fired at
-    var evasionDistance = 200;  // The distance within which this ship will begin to evade its target
-    var firingAngle = 0.1;      // The maximum angle of deviation outside of which we will not fire
+    var firingDistance = config.AIShip.firingDistance     || 800;   // The distance within which a target will be fired at
+    var evasionDistance = config.AIShip.evasionDistance   || 200;   // The distance within which this ship will begin to evade its target
+    var firingAngle = config.AIShip.firingAngle           || 0.1;   // The maximum angle of deviation outside of which we will not fire
     // Target prioritisation constants
-    var shotNumberWeight = 1;   // The weighting applied to the number of shots an opponent has taken
-    var proximityWeight = 1000; // The weighting given to the inverse of an opponent's proximity
+    var shotNumberWeight = config.AIShip.shotNumberWeight || 1;     // The weighting applied to the number of shots an opponent has taken
+    var proximityWeight = config.AIShip.proximityWeight   || 1000;  // The weighting given to the inverse of an opponent's proximity
 
     this.preloader = function(game) {
         game.load.atlas('enemy', 'assets/games/tanks/enemy-tanks.png', 'assets/games/tanks/tanks.json');

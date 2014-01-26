@@ -9,8 +9,8 @@ Ship = function(game, sprite, bullets) {
 	this.alive = true;
 	this.health = config.ship.health;
 	this.allies = [];
-	this.enemies = [];
-    this.numberOfShots = 0;
+	this.opponents = [];
+    this.numberOfShots = 0; //Used to calculate visibility of ship
 	
 	//Applies the sprite to the ship
 	this.ship = sprite;
@@ -26,8 +26,8 @@ Ship = function(game, sprite, bullets) {
 	
 	this.setAllies = function(allies) {
 		this.allies = allies;}
-	this.setEnemies = function(enemies) {
-		this.enemies = enemies;}
+	this.setOpponents = function(opponents) {
+		this.opponents = opponents;}
 
 
 	this.turn = function(delRot) {
