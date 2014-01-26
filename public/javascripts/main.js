@@ -6,11 +6,9 @@ function preload () {
     game.load.image('player', 'assets/ships/playerShip.png');//, 'assets/games/tanks/tanks.json');
     game.load.image('enemy', 'assets/ships/enemyShip.png');
     game.load.image('friend', 'assets/ships/friendlyShip.png');
-    game.load.image('bullet', 'assets/games/tanks/bullet.png');
-    game.load.image('earth', 'assets/games/tanks/scorched_earth.png');
-    game.load.spritesheet('kaboom', 'assets/games/tanks/explosion.png', 64, 64, 23);
+    game.load.image('bullet', 'assets/ships/bullet20.png');
+    game.load.spritesheet('kaboom', 'assets/ships/explosion.png', 100, 100, 25);
    game.load.script('light', 'assets/filters/light.js');
-//    game.load.script('fire', 'assets/filters/Fire.js');
     
 }
 

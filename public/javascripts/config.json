@@ -2,7 +2,7 @@ var config = {
 	"map": {	
         "width": 1200, 
         "height": 400,
-		"lightsOn": 0,
+		"lightEffectsOn": 0,
 		},
 
 	"bullet": {	
