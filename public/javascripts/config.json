@@ -1,0 +1,67 @@
+var config = {
+	"map": {	
+        "width": 1200, 
+        "height": 600,
+		"lightEffectsOn": 1,
+		},
+
+	"bullet": {	
+        "friendNumber":     4, 
+        "enemyNumber":      4, 
+        "playerNumber":     2,
+        "explosionNumber":  4,
+        "speed":            1000, 
+		},
+
+	"ship": {	
+        "fireRate":         1000,
+        "health":           4,
+        "maxVelX":          400, 
+        "maxVelY":          400,
+		},
+
+	"player": {	
+        "maxSpeed":         200,
+        "maxTurn":          0.06,
+        "startX":           150,
+        "startY":           450,
+        "fireRate":         500, 
+        "health":           20,
+        "dragX":            200, 
+        "dragY":            200,
+        "turnRate":         0.06, 
+        "acceleration":     200, 
+        "decceleration":    -4,
+        },
+
+	"friend": {	
+        "number":           3,
+        },
+
+    "shader": { 
+        "diameter":           200,
+        },
+
+	"enemy": {	
+        "number":           4,
+        },
+
+         "collide": {"playerHitsEnemy": 1, "playerHitsFriend": 1, "playerHitsPlayer": 1,
+                 "friendHitsEnemy": 1, "friendHitsFriend": 0, "friendHitsPlayer": 1,
+                 "enemyHitsEnemy": 0, "enemyHitsFriend": 1, "enemyHitsPlayer": 1},
+         "fire": {"playerShootsEnemy": 1, "playerShootsFriend": 1, "playerShootsPlayer": 1,
+                  "friendShootsEnemy": 1, "friendShootsFriend": 1, "friendShootsPlayer": 1,
+                  "enemyShootsEnemy": 1, "enemyShootsFriend": 1, "enemyShootsPlayer": 1},
+
+
+    "AIShip": {
+        "firingDistance":   800,
+        "evasionDistance":  200,
+        "firingAngle":      0.1,
+        "shotNumberWeight": 0.4,
+        "proximityWeight":  10000,
+        "minWallProximity": 200,
+        }
+		
+};
+
