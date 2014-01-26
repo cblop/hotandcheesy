@@ -2,7 +2,7 @@ var config = {
 	"map": {	
         "width": 1200, 
         "height": 600,
-		"lightEffectsOn": 1,
+		"lightEffectsOn": 0,
 		},
 
 	"bullet": {	
@@ -10,12 +10,12 @@ var config = {
         "enemyNumber":      4, 
         "playerNumber":     2,
         "explosionNumber":  100,
-        "speed":            1000, 
+        "speed":            800, 
 		},
 
 	"ship": {	
         "fireRate":         1000,
-        "health":           100,
+        "health":           4,
         "maxVelX":          400, 
         "maxVelY":          400,
 		},
@@ -35,11 +35,11 @@ var config = {
         },
 
 	"friend": {	
-        "number":           3,
+        "number":           2,
         },
 
 	"enemy": {	
-        "number":           4,
+        "number":           100,
         },
 
          "collide": {"playerHitsEnemy": 1, "playerHitsFriend": 1, "playerHitsPlayer": 1,
@@ -47,7 +47,7 @@ var config = {
                  "enemyHitsEnemy": 0, "enemyHitsFriend": 1, "enemyHitsPlayer": 1},
          "fire": {"playerShootsEnemy": 1, "playerShootsFriend": 1, "playerShootsPlayer": 1,
                   "friendShootsEnemy": 1, "friendShootsFriend": 1, "friendShootsPlayer": 1,
-                  "enemyShootsEnemy": 1, "enemyShootsFriend": 1, "enemyShootsPlayer": 1},
+                  "enemyShootsEnemy": 0, "enemyShootsFriend": 1, "enemyShootsPlayer": 1},
 
 
     "AIShip": {
