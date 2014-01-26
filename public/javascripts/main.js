@@ -7,13 +7,9 @@ function preload () {
     game.load.image('friend', 'assets/ships/friendlyShip.png');
     game.load.image('bullet', 'assets/ships/bullet20.png');
     game.load.spritesheet('kaboom', 'assets/ships/explosion.png', 100, 100, 25);
-   game.load.script('light', 'assets/filters/light.js');
+    game.load.script('light', 'assets/filters/light.js');
 	game.load.image('shield','assets/ships/shield.png');
-<<<<<<< HEAD
 	game.load.image('stars','assets/ships/stars.png');
-    
-=======
->>>>>>> 84d399ad0556fe02b92e62022e4dc2d96f320b76
 }
 
 var stars;
