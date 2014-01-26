@@ -27,6 +27,8 @@ function AIShip(game, sprite, bullets, player) {
         this.selectTarget();
         this.decideStrategy();
         this.checkAndFire();
+	this.shield.x = this.ship.x;
+	this.shield.y = this.ship.y;
     };
 
     this.distanceToTarget = function()
