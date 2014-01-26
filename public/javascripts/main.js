@@ -7,11 +7,12 @@ function preload () {
     game.load.image('friend', 'assets/ships/friendlyShip.png');
     game.load.image('bullet', 'assets/ships/bullet20.png');
     game.load.spritesheet('kaboom', 'assets/ships/explosion.png', 100, 100, 25);
-   game.load.script('light', 'assets/filters/light.js');
+    game.load.script('light', 'assets/filters/light.js');
 	game.load.image('shield','assets/ships/shield.png');
+	game.load.image('stars','assets/ships/stars.png');
 }
 
-var land;
+var stars;
 
 var player;
 
@@ -50,6 +51,8 @@ function create () {
 
 	
     game.world.setBounds(0,0,config.map.width,config.map.height);
+    stars = game.add.tileSprite(0,0,config.map.width, config.map.height, 'stars');
+    stars.fixedToCamera = true;
 	cursors = game.input.keyboard.createCursorKeys();
 
 	bullets = [];
@@ -313,6 +316,8 @@ function update () {
     //healthbar.drawRect(10, config.map.height - 10, 20, -100 + (100 * (player.health / config.player.health)));
 
 //    fireFilter.update();
+    stars.tilePosition.x = -game.camera.x;
+    stars.tilePosition.y = -game.camera.y;
 
 }
 
