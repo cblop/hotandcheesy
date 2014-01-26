@@ -131,7 +131,7 @@ function create () {
     background.width = config.map.width;
     background.height = config.map.width;
 
-    if(config.map.lightsOn == "1")
+    if(config.map.lightEffectsOn == "1")
 	{
 	lightFilter = game.add.filter('Light', config.map.width, config.map.height);
     lightFilter.alpha = 1.0;
@@ -207,7 +207,7 @@ function update () {
     //console.log(bullets.getAt(0).x);
     //lightFilter.update(bullets.getAt(0).x, bullets.getAt(0).y);
 
-	if(config.map.lightsOn == "1")
+	if(config.map.lightEffectsOn == "1")
 	{
 		lightFilter.eshot0 = {x: enemyBullets.getAt(0).x, y: config.map.height - enemyBullets.getAt(0).y };
         lightFilter.eshot1 = {x: enemyBullets.getAt(1).x, y: config.map.height - bullets.getAt(1).y };
