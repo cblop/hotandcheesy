@@ -124,15 +124,14 @@ function create () {
     background.width = config.map.width;
     background.height = config.map.width;
 
-    lightFilter = game.add.filter('Light', config.map.width, config.map.height);
+    if(config.map.lightsOn == "1")
+	{
+	lightFilter = game.add.filter('Light', config.map.width, config.map.height);
     lightFilter.alpha = 1.0;
-
     //renderGroup.add(enemies);
     //renderGroup.add(explosions);
     background.filters = [lightFilter];
-
-
-
+	}
 }
 
 function update () {
@@ -198,11 +197,12 @@ function update () {
 
     //console.log(bullets.getAt(0).x);
     //lightFilter.update(bullets.getAt(0).x, bullets.getAt(0).y);
-
-    lightFilter.xpos = bullets.getAt(0).x;
-    lightFilter.ypos = config.map.height - bullets.getAt(0).y;
-    lightFilter.update();
-
+	if(config.map.lightsOn == "1")
+	{
+		lightFilter.xpos = bullets.getAt(0).x;
+		lightFilter.ypos = config.map.height - bullets.getAt(0).y;
+		lightFilter.update();
+	}
     healthbar.y = config.map.height - healthBarHeight - 10 + 100 * (1 - (player.health / config.player.health));
     healthbar.scale.y = (player.health / config.player.health);
 
