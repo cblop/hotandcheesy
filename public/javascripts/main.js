@@ -9,7 +9,7 @@ function preload () {
     game.load.image('bullet', 'assets/games/tanks/bullet.png');
     game.load.image('earth', 'assets/games/tanks/scorched_earth.png');
     game.load.spritesheet('kaboom', 'assets/games/tanks/explosion.png', 64, 64, 23);
-//    game.load.script('light', 'assets/filters/light.js');
+   game.load.script('light', 'assets/filters/light.js');
 //    game.load.script('fire', 'assets/filters/Fire.js');
     
 }
@@ -37,6 +37,8 @@ var background;
 var renderGroup;
 
 var playerCover;
+var playerLights = [];
+var enemyLights = [];
 
 function dSpace(e){if((e.keyCode==32)&&(!e.shiftKey)){e.preventDefault();}}
 window.addEventListener('keydown',dSpace,true);void 0;
@@ -134,8 +136,10 @@ function create () {
 	{
 	lightFilter = game.add.filter('Light', config.map.width, config.map.height);
     lightFilter.alpha = 1.0;
-    //renderGroup.add(enemies);
-    //renderGroup.add(explosions);
+    lightFilter.red = 1.0;
+    lightFilter.green = 1.0;
+    lightFilter.blue = 2.0;
+
     background.filters = [lightFilter];
 	}
 }
@@ -203,12 +207,14 @@ function update () {
 
     //console.log(bullets.getAt(0).x);
     //lightFilter.update(bullets.getAt(0).x, bullets.getAt(0).y);
+
 	if(config.map.lightsOn == "1")
 	{
 		lightFilter.xpos = bullets.getAt(0).x;
 		lightFilter.ypos = config.map.height - bullets.getAt(0).y;
 		lightFilter.update();
 	}
+
     healthbar.y = config.map.height - healthBarHeight - 10 + 100 * (1 - (player.health / config.player.health));
     healthbar.scale.y = (player.health / config.player.health);
 
