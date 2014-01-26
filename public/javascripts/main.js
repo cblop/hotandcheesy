@@ -8,10 +8,10 @@ function preload () {
     game.load.image('friend', 'assets/ships/friendlyShip.png');
     game.load.image('bullet', 'assets/ships/bullet20.png');
     game.load.spritesheet('kaboom', 'assets/ships/explosion.png', 100, 100, 25);
-   game.load.script('light', 'assets/filters/light.js');
+    game.load.script('light', 'assets/filters/light.js');
 	game.load.image('shield','assets/ships/shield.png');
     
-}
+};
 
 var land;
 
@@ -105,15 +105,20 @@ function create () {
 
     if(config.map.lightEffectsOn == "1")
 	{
-	lightFilter = game.add.filter('Light', config.map.width, config.map.height);
-    lightFilter.alpha = 1.0;
-    lightFilter.red = 1.0;
-    lightFilter.green = 1.0;
-    lightFilter.blue = 2.0
-    background.filters = [lightFilter];
-	
-
+        lightFilter = game.add.filter('Light', config.map.width, config.map.height);
+        lightFilter.alpha = 1.0;
+        lightFilter.red = 1.0;
+        lightFilter.green = 1.0;
+        lightFilter.blue = 2.0
+        background.filters = [lightFilter];
 	}
+    splashText(game, "In a crippled ship in the depths of space, your last chance of " +
+                     "survival is relying on the light of battle to survive. While " +
+                     "your allies will do their best to help you, you must fend for " +
+                     "yourself to wipe out the enemy ships. While firing your weapons " +
+                     "illuminates a path, it also draw the attention of the enemies.", 30, 0,
+                     function() { splashText(game, "Use the arrow keys to move, space-bar to shoot.", 5, 0); }
+                     );
 }
 
 function beginNewGame(ln)
@@ -165,8 +170,8 @@ function update () {
 	if(player.alive == false)
 	{
 		levelNumber = config.enemy.number;
-		//alert("You be dead!");
 		beginNewGame(levelNumber);
+        splashText(game, "You LOSE. Back to level " + levelNumber, 2, 0, null);
 	}
 	var allEnemiesDead = true;
 	for (var i = 0; i < enemies.length; i++)
@@ -179,8 +184,8 @@ function update () {
 	}
 	if(allEnemiesDead)
 	{
-		//alert("WINNAH!");
 		beginNewGame(levelNumber*=2);
+        splashText(game, "Sweet. Onto level " + levelNumber, 2, 0, null);
 	}
 
     var result = false;
