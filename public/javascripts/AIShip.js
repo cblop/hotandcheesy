@@ -98,7 +98,7 @@ function AIShip(game, sprite, bullets, player) {
             var maxScoreIndex = filteredOpponents
                 .map(scoreFunc)
                 .reduce(function(prevVal, currVal, ind, arr)
-                    { return (arr[currVal] > arr[prevVal]) ? currVal : prevVal; }
+                    { return (arr[ind] > arr[prevVal]) ? ind : prevVal; }
                 , 0);
             this.target = filteredOpponents[maxScoreIndex];
         }
