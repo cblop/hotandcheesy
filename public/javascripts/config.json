@@ -9,13 +9,13 @@ var config = {
         "friendNumber":     4, 
         "enemyNumber":      4, 
         "playerNumber":     2,
-        "explosionNumber":  100,
+        "explosionNumber":  4,
         "speed":            1000, 
 		},
 
 	"ship": {	
         "fireRate":         1000,
-        "health":           100,
+        "health":           4,
         "maxVelX":          400, 
         "maxVelY":          400,
 		},
@@ -25,7 +25,7 @@ var config = {
         "maxTurn":          0.06,
         "startX":           150,
         "startY":           450,
-        "fireRate":         1000, 
+        "fireRate":         500, 
         "health":           20,
         "dragX":            200, 
         "dragY":            200,
@@ -38,8 +38,12 @@ var config = {
         "number":           3,
         },
 
+    "shader": { 
+        "diameter":           200,
+        },
+
 	"enemy": {	
-        "number":           4,
+        "number":           64,
         },
 
          "collide": {"playerHitsEnemy": 1, "playerHitsFriend": 1, "playerHitsPlayer": 1,

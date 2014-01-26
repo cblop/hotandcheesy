@@ -2,7 +2,6 @@ var game = new Phaser.Game(config.map.width, config.map.height, Phaser.WEBGL, ''
 // var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
 function preload () {
-
     game.load.image('player', 'assets/ships/playerShip.png');//, 'assets/games/tanks/tanks.json');
     game.load.image('enemy', 'assets/ships/enemyShip.png');
     game.load.image('friend', 'assets/ships/friendlyShip.png');
@@ -10,10 +9,10 @@ function preload () {
     game.load.spritesheet('kaboom', 'assets/ships/explosion.png', 100, 100, 25);
     game.load.script('light', 'assets/filters/light.js');
 	game.load.image('shield','assets/ships/shield.png');
-    
+	game.load.image('stars','assets/ships/stars.png');
 };
 
-var land;
+var stars;
 
 var player;
 
@@ -47,21 +46,14 @@ window.addEventListener('keydown',dSpace,true);void 0;
 function create () {
     // TODO: Health bar is terrible hack. There MUST be a better mechanism for
     // this. (See also the health bar code in the update function).
-	levelNumber = config.enemy.number;
-    barback = game.add.graphics(0, 0);
-    healthbar = game.add.graphics(10, config.map.height - healthBarHeight - 10);
-    barback.lineStyle(2, 0xFFFFFF, 1); // width, color (0x0000FF), alpha (0 -> 1) // required settings
-    healthbar.lineStyle(2, 0x00FF00, 1); // width, color (0x0000FF), alpha (0 -> 1) // required settings
-    barback.beginFill(0x000000, 1);
-    healthbar.beginFill(0x00FF00, 1);
-    barback.drawRect(8, config.map.height - 8, 24, -104);
-    healthBarRect = healthbar.drawRect(0, 0, 20, healthBarHeight);
+	levelNumber = 1;
+   
 
 	
     game.world.setBounds(0,0,config.map.width,config.map.height);
+    stars = game.add.tileSprite(0,0,config.map.width, config.map.height, 'stars');
+    stars.fixedToCamera = true;
 	cursors = game.input.keyboard.createCursorKeys();
-	
-	//player = new PlayerShip(game, config.player.startX, config.player.startY, bullets, cursors); 
 
 	bullets = [];
     bullets = game.add.group();
@@ -69,6 +61,8 @@ function create () {
     bullets.createMultiple(config.bullet.playerNumber, 'bullet');
     bullets.setAll('anchor.x', 0.5);
     bullets.setAll('anchor.y', 0.5);
+    bullets.setAll('x', -300);
+    bullets.setAll('y', -300);
     bullets.setAll('outOfBoundsKill', true);
 	
 	enemyBullets = [];
@@ -77,6 +71,8 @@ function create () {
     enemyBullets.createMultiple(config.bullet.enemyNumber, 'bullet');
     enemyBullets.setAll('anchor.x', 0.5);
     enemyBullets.setAll('anchor.y', 0.5);
+    enemyBullets.setAll('x', -300);
+    enemyBullets.setAll('y', -300);
     enemyBullets.setAll('outOfBoundsKill', true);
 	
 	friendBullets = game.add.group();
@@ -84,9 +80,40 @@ function create () {
     friendBullets.createMultiple(config.bullet.friendNumber, 'bullet');
     friendBullets.setAll('anchor.x', 0.5);
     friendBullets.setAll('anchor.y', 0.5);
+    friendBullets.setAll('x', -300);
+    friendBullets.setAll('y', -300);
     friendBullets.setAll('outOfBoundsKill', true);
+	player = new PlayerShip(game, config.player.startX, config.player.startY, bullets, cursors); 
+
+    for (var i = 0; i < config.enemy.number; i++)
+    {
+        //enemies in random positions
+		//enemies.push(new EnemyShip(i, game, game.world.randomX, game.world.randomY, enemyBullets, player));
+		//Enemies down right hand side
+		enemies.push(new EnemyShip(i, game, game.world.width - 50, game.world.randomY, enemyBullets, player));
+		
+        //enemies[i].ship.filters = [lightFilter];
+    }
 	
-	beginNewGame(1);
+    for (var i = 0; i < config.friend.number; i++) {
+       //Friens in random positions
+	   //friends.push(new FriendlyShip(i, game, game.world.randomX, game.worldrandomY, friendBullets, player));
+       //friends down left hand side
+	   friends.push(new FriendlyShip(i, game, 50, game.world.randomY, friendBullets, player));
+
+
+    }
+
+    for(var i=0; i < config.enemy.number; i++) {
+        enemies[i].setOpponents(friends);
+        enemies[i].setAllies(enemies);
+        enemies[i].pushOpponent(player);
+    }
+    for(var i=0; i<config.friend.number; i++) {
+        friends[i].setOpponents(enemies);
+        friends[i].setAllies(friends);
+    }
+	beginNewGame(levelNumber);
 
     //  Explosion pool
     explosions = game.add.group();
@@ -98,6 +125,9 @@ function create () {
         explosionAnimation.animations.add('kaboom');
     }
 
+    explosions.setAll('x', -300);
+    explosions.setAll('y', -300);
+
     game.camera.focusOnXY(0, 0);
 	background = game.add.sprite(0, 0);
     background.width = config.map.width;
@@ -106,12 +136,17 @@ function create () {
     if(config.map.lightEffectsOn == "1")
 	{
         lightFilter = game.add.filter('Light', config.map.width, config.map.height);
-        lightFilter.alpha = 1.0;
-        lightFilter.red = 1.0;
-        lightFilter.green = 1.0;
-        lightFilter.blue = 2.0
         background.filters = [lightFilter];
 	}
+	barback = game.add.graphics(0, 0);
+    healthbar = game.add.graphics(10, config.map.height - healthBarHeight - 10);
+    barback.lineStyle(2, 0xFFFFFF, 1); // width, color (0x0000FF), alpha (0 -> 1) // required settings
+    healthbar.lineStyle(2, 0x00FF00, 1); // width, color (0x0000FF), alpha (0 -> 1) // required settings
+    barback.beginFill(0x000000, 1);
+    healthbar.beginFill(0x00FF00, 1);
+    barback.drawRect(8, config.map.height - 8, 24, -104);
+    healthBarRect = healthbar.drawRect(0, 0, 20, healthBarHeight);
+
     splashText(game, "In a crippled ship in the depths of space, your last chance of " +
                      "survival is relying on the light of battle to survive. While " +
                      "your allies will do their best to help you, you must fend for " +
@@ -123,46 +158,44 @@ function create () {
 
 function beginNewGame(ln)
 {
-	player = new PlayerShip(game, config.player.startX, config.player.startY, bullets, cursors); 
+
 
 	for(var k = 0; k < enemies.length; k++)
 	{
+		if(enemies[k].alive){
 		enemies[k].ship.kill();
+		enemies[k].alive = false;
+		}
 	}
-	enemies = [];
 
     for (var i = 0; i < ln; i++)
     {
-        //enemies in random positions
-		//enemies.push(new EnemyShip(i, game, game.world.randomX, game.world.randomY, enemyBullets, player));
-		//Enemies down right hand side
-		enemies.push(new EnemyShip(i, game, game.world.width - 50, game.world.randomY, enemyBullets, player));
-        //enemies[i].ship.filters = [lightFilter];
+	enemies[i].ship.reset(game.world.width - 50, game.world.randomY, config.ship.health);
+	enemies[i].alive = true;
+	enemies[i].health = config.ship.health;
     }
-	
+	   
 	for(var k = 0; k < friends.length; k++)
 	{
+		if(friends[k].alive){
 		friends[k].ship.kill();
+		friends[k].alive = false;
+		}
 	}
-	friends = [];
+	
     for (var i = 0; i < config.friend.number; i++) {
+	
        //Friens in random positions
 	   //friends.push(new FriendlyShip(i, game, game.world.randomX, game.worldrandomY, friendBullets, player));
        //friends down left hand side
-	   friends.push(new FriendlyShip(i, game, 50, game.world.randomY, friendBullets, player));
+	   friends[i].ship.reset(50, game.world.randomY, config.ship.health);
+	   friends[i].alive = true;
+	   friends[i].health = config.ship.health;
     }
-
-    for(var i=0; i < ln; i++) {
-        enemies[i].setOpponents(friends);
-        enemies[i].setAllies(enemies);
-        enemies[i].pushOpponent(player);
-    }
-    for(var i=0; i<config.friend.number; i++) {
-        friends[i].setOpponents(enemies);
-        friends[i].setAllies(friends);
-    }
-
-//player.health = config.player.health
+	
+	player.ship.reset(config.player.startX, config.player.startY, config.player.health);
+	player.alive = true;
+	player.health = config.player.health;
 }
 
 function update () {
@@ -176,7 +209,7 @@ function update () {
 	var allEnemiesDead = true;
 	for (var i = 0; i < enemies.length; i++)
 	{
-		if(enemies[i].ship.alive) 
+		if(enemies[i].alive) 
 		{
 			allEnemiesDead = false;
 			break;
@@ -262,9 +295,23 @@ function update () {
         lightFilter.fshot2 = {x: friendBullets.getAt(2).x, y: config.map.height - friendBullets.getAt(2).y };
         lightFilter.fshot3 = {x: friendBullets.getAt(3).x, y: config.map.height - friendBullets.getAt(3).y };
 
+ 		lightFilter.expl0 = {x: explosions.getAt(0).x, y: config.map.height - explosions.getAt(0).y };
+        lightFilter.expl1 = {x: explosions.getAt(1).x, y: config.map.height - explosions.getAt(1).y };
+        lightFilter.expl2 = {x: explosions.getAt(2).x, y: config.map.height - explosions.getAt(2).y };
+        lightFilter.expl3 = {x: explosions.getAt(3).x, y: config.map.height - explosions.getAt(3).y };
         lightFilter.pshot0 = {x: bullets.getAt(0).x, y: config.map.height - bullets.getAt(0).y };
         lightFilter.pshot1 = {x: bullets.getAt(1).x, y: config.map.height - bullets.getAt(1).y };
 
+ for (var i = 0;i < 4; i++) {
+            explosionAnimation = explosions.getAt(i);
+            if (explosionAnimation.animations.getAnimation('kaboom').isFinished) {
+                explosionAnimation.x = -300;
+                explosionAnimation.y = -300;
+                //explosionAnimation.y = config.map.height;
+            }
+        }
+
+        lightFilter.diameter = config.shader.diameter;
 		lightFilter.update();
 	}
 
@@ -277,6 +324,8 @@ function update () {
     //healthbar.drawRect(10, config.map.height - 10, 20, -100 + (100 * (player.health / config.player.health)));
 
 //    fireFilter.update();
+    stars.tilePosition.x = -game.camera.x;
+    stars.tilePosition.y = -game.camera.y;
 
 }
 
@@ -315,6 +364,9 @@ function identifyShip(shipType, index) {
 }
 
 function bulletHitShip (ship, bullet) {
+	bullet.x = -300;
+    //bullet.y = config.map.height;
+    bullet.y = -300;
 	bullet.kill();
 	ship = identifyShip(ship.shipType, ship.index);
 	var dam = bulletDamage(ship.ship.shipType, bullet.group.shipType);
