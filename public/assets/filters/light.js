@@ -98,43 +98,27 @@ Phaser.Filter.Light = function (game, xval, yval) {
         */
         "Light e0;",
         "e0.pos = eshot0;",
-        "e0.spread = 100.0;",
-        "e0.size = 70.0;",
 
         "Light e1;",
         "e1.pos = eshot1;",
-        "e1.spread = 50.0;",
-        "e1.size = 20.0;",
 
         "Light e2;",
         "e2.pos = eshot2;",
-        "e2.spread = 100.0;",
-        "e2.size = 70.0;",
 
         "Light e3;",
         "e3.pos = eshot3;",
-        "e3.spread = 50.0;",
-        "e3.size = 20.0;",
 
         "Light e4;",
         "e4.pos = eshot4;",
-        "e4.spread = 100.0;",
-        "e4.size = 70.0;",
 
         "Light e5;",
         "e5.pos = eshot5;",
-        "e5.spread = 50.0;",
-        "e5.size = 20.0;",
 
         "Light e6;",
         "e6.pos = eshot6;",
-        "e6.spread = 100.0;",
-        "e6.size = 70.0;",
 
         "Light e7;",
         "e7.pos = eshot7;",
-        "e7.spread = 50.0;",
-        "e7.size = 20.0;",
 
         "float intensity = 0.0;",
         "lights[0] = e0;",
