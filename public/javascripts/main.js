@@ -6,11 +6,10 @@ function preload () {
     game.load.image('player', 'assets/ships/playerShip.png');//, 'assets/games/tanks/tanks.json');
     game.load.image('enemy', 'assets/ships/enemyShip.png');
     game.load.image('friend', 'assets/ships/friendlyShip.png');
-    game.load.image('bullet', 'assets/games/tanks/bullet.png');
-    game.load.image('earth', 'assets/games/tanks/scorched_earth.png');
-    game.load.spritesheet('kaboom', 'assets/games/tanks/explosion.png', 64, 64, 23);
+    game.load.image('bullet', 'assets/ships/bullet20.png');
+    game.load.spritesheet('kaboom', 'assets/ships/explosion.png', 100, 100, 25);
    game.load.script('light', 'assets/filters/light.js');
-//    game.load.script('fire', 'assets/filters/Fire.js');
+	game.load.image('shield','assets/ships/shield.png');
     
 }
 
@@ -248,8 +247,14 @@ function update () {
 
 	if(config.map.lightEffectsOn == "1")
 	{
-		lightFilter.xpos = bullets.getAt(0).x;
-		lightFilter.ypos = config.map.height - bullets.getAt(0).y;
+		lightFilter.eshot0 = {x: enemyBullets.getAt(0).x, y: config.map.height - enemyBullets.getAt(0).y };
+        lightFilter.eshot1 = {x: enemyBullets.getAt(1).x, y: config.map.height - bullets.getAt(1).y };
+        lightFilter.eshot2 = {x: enemyBullets.getAt(2).x, y: config.map.height - enemyBullets.getAt(2).y };
+        lightFilter.eshot3 = {x: enemyBullets.getAt(3).x, y: config.map.height - enemyBullets.getAt(3).y };
+        lightFilter.eshot4 = {x: enemyBullets.getAt(4).x, y: config.map.height - bullets.getAt(4).y };
+        lightFilter.eshot5 = {x: enemyBullets.getAt(5).x, y: config.map.height - enemyBullets.getAt(5).y };
+        lightFilter.eshot6 = {x: enemyBullets.getAt(6).x, y: config.map.height - bullets.getAt(4).y };
+        lightFilter.eshot7 = {x: enemyBullets.getAt(7).x, y: config.map.height - enemyBullets.getAt(5).y };
 		lightFilter.update();
 	}
 
@@ -270,8 +275,8 @@ function shipsCollide (shipA, shipB) {
 
     var shipA = identifyShip(shipA.shipType, shipA.index);
     var shipB = identifyShip(shipB.shipType, shipB.index);
-	var destroyedA = shipA.damage(collideDamage(shipA.ship.shipType, shipB.ship.shipType));
-	var destroyedB = shipB.damage(collideDamage(shipB.ship.shipType, shipA.ship.shipType));
+	var destroyedA = shipA.damage(collideDamage(shipA.ship.shipType, shipB.ship.shipType), game.physics.angleBetween(shipA.ship, shipB.ship));
+	var destroyedB = shipB.damage(collideDamage(shipB.ship.shipType, shipA.ship.shipType), game.physics.angleBetween(shipB.ship, shipA.ship));
 
     if (destroyedA)
     {
@@ -303,7 +308,7 @@ function bulletHitShip (ship, bullet) {
 	bullet.kill();
 	ship = identifyShip(ship.shipType, ship.index);
 	var dam = bulletDamage(ship.ship.shipType, bullet.group.shipType);
-	var destroyed = ship.damage(dam);
+	var destroyed = ship.damage(dam, game.physics.angleBetween(ship.ship, bullet));
 	//console.log(destroyed);
 	if(destroyed){
 		var explosionAnimation = explosions.getFirstDead();

@@ -1,21 +1,21 @@
 var config = {
 	"map": {	
         "width": 1200, 
-        "height": 400,
+        "height": 600,
 		"lightEffectsOn": 0,
 		},
 
 	"bullet": {	
-        "friendNumber":     100, 
-        "enemyNumber":      100, 
+        "friendNumber":     5, 
+        "enemyNumber":      20, 
         "playerNumber":     30,
         "explosionNumber":  100,
-        "speed":            800, 
+        "speed":            1000, 
 		},
 
 	"ship": {	
         "fireRate":         1000,
-        "health":           8,
+        "health":           100,
         "maxVelX":          400, 
         "maxVelY":          400,
 		},
@@ -25,7 +25,7 @@ var config = {
         "maxTurn":          0.06,
         "startX":           150,
         "startY":           450,
-        "fireRate":         50, 
+        "fireRate":         1000, 
         "health":           20,
         "dragX":            200, 
         "dragY":            200,
@@ -35,27 +35,28 @@ var config = {
         },
 
 	"friend": {	
-        "number":           1,
+        "number":           3,
         },
 
 	"enemy": {	
-        "number":           1,
+        "number":           4,
         },
 
          "collide": {"playerHitsEnemy": 1, "playerHitsFriend": 1, "playerHitsPlayer": 1,
                  "friendHitsEnemy": 1, "friendHitsFriend": 0, "friendHitsPlayer": 1,
                  "enemyHitsEnemy": 0, "enemyHitsFriend": 1, "enemyHitsPlayer": 1},
          "fire": {"playerShootsEnemy": 1, "playerShootsFriend": 1, "playerShootsPlayer": 1,
-                  "friendShootsEnemy": 1, "friendShootsFriend": 0, "friendShootsPlayer": 1,
-                  "enemyShootsEnemy": 0, "enemyShootsFriend": 1, "enemyShootsPlayer": 1},
+                  "friendShootsEnemy": 1, "friendShootsFriend": 1, "friendShootsPlayer": 1,
+                  "enemyShootsEnemy": 1, "enemyShootsFriend": 1, "enemyShootsPlayer": 1},
 
 
     "AIShip": {
         "firingDistance":   800,
         "evasionDistance":  200,
         "firingAngle":      0.1,
-        "shotNumberWeight": 1,
-        "proximityWeight":  1000,
+        "shotNumberWeight": 0.4,
+        "proximityWeight":  10000,
+        "minWallProximity": 200,
         }
 		
 };

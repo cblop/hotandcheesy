@@ -45,7 +45,8 @@ this.update = function(cursors) {
         //  Boom!
         this.fire();
     }
-
+	this.shield.x = this.ship.x;
+	this.shield.y = this.ship.y;
 };
 
 
