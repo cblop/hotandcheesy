@@ -33,6 +33,8 @@ Phaser.Filter.Light = function (game, xval, yval) {
 
     this.uniforms.diameter = { type: '1f', value: 100.0 };
 
+    this.uniforms.screenHeight = { type: '1f', value: config.map.height };
+
     this.fragmentSrc = [
 
         "precision mediump float;",
@@ -62,13 +64,14 @@ Phaser.Filter.Light = function (game, xval, yval) {
         "uniform float     green;",
         "uniform float     blue;",
         "uniform float     diameter;",
+        "uniform float     screenHeight;",
 
        "struct Light {",
             "vec2 pos;     // Light position",
             "float spread;    // Light spread",
             "float size;   // Light bulb size",
         "};",
-        "Light lights[14];",
+        "Light lights[16];",
 
         "void main(void) {",
 
@@ -114,6 +117,12 @@ Phaser.Filter.Light = function (game, xval, yval) {
         "Light x3;",
         "x3.pos = expl3;",
 
+        "Light health1;",
+        "health1.pos = vec2(0, 0);",
+
+        "Light health2;",
+        "health2.pos = vec2(0, 100);",
+
 
         "float intensity = 0.0;",
         "lights[0] = e0;",
@@ -130,8 +139,10 @@ Phaser.Filter.Light = function (game, xval, yval) {
         "lights[11] = x1;",
         "lights[12] = x2;",
         "lights[13] = x3;",
+        "lights[14] = health1;",
+        "lights[15] = health2;",
 
-        "for(int i = 0; i < 14; i++){",
+        "for(int i = 0; i < 16; i++){",
 
             "float x_dis = lights[i].pos.x - gl_FragCoord.x;",
             "float y_dis = lights[i].pos.y - gl_FragCoord.y;",

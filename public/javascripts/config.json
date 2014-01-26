@@ -38,6 +38,10 @@ var config = {
         "number":           3,
         },
 
+    "shader": { 
+        "diameter":           200,
+        },
+
 	"enemy": {	
         "number":           4,
         },

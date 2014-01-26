@@ -69,6 +69,8 @@ function create () {
     bullets.createMultiple(config.bullet.playerNumber, 'bullet');
     bullets.setAll('anchor.x', 0.5);
     bullets.setAll('anchor.y', 0.5);
+    bullets.setAll('x', -300);
+    bullets.setAll('y', -300);
     bullets.setAll('outOfBoundsKill', true);
 	
 	enemyBullets = [];
@@ -77,6 +79,8 @@ function create () {
     enemyBullets.createMultiple(config.bullet.enemyNumber, 'bullet');
     enemyBullets.setAll('anchor.x', 0.5);
     enemyBullets.setAll('anchor.y', 0.5);
+    enemyBullets.setAll('x', -300);
+    enemyBullets.setAll('y', -300);
     enemyBullets.setAll('outOfBoundsKill', true);
 	
 	friendBullets = game.add.group();
@@ -84,6 +88,8 @@ function create () {
     friendBullets.createMultiple(config.bullet.friendNumber, 'bullet');
     friendBullets.setAll('anchor.x', 0.5);
     friendBullets.setAll('anchor.y', 0.5);
+    friendBullets.setAll('x', -300);
+    friendBullets.setAll('y', -300);
     friendBullets.setAll('outOfBoundsKill', true);
 	
 	beginNewGame(1);
@@ -97,6 +103,9 @@ function create () {
         explosionAnimation.anchor.setTo(0.5, 0.5);
         explosionAnimation.animations.add('kaboom');
     }
+
+    explosions.setAll('x', -300);
+    explosions.setAll('y', -300);
 
     game.camera.focusOnXY(0, 0);
 	background = game.add.sprite(0, 0);
@@ -243,6 +252,7 @@ function update () {
 
 	if(config.map.lightEffectsOn == "1")
 	{
+        // this is horribly inefficient: too many lookups!
 		lightFilter.eshot0 = {x: enemyBullets.getAt(0).x, y: config.map.height - enemyBullets.getAt(0).y };
         lightFilter.eshot1 = {x: enemyBullets.getAt(1).x, y: config.map.height - bullets.getAt(1).y };
         lightFilter.eshot2 = {x: enemyBullets.getAt(2).x, y: config.map.height - enemyBullets.getAt(2).y };
@@ -261,6 +271,16 @@ function update () {
         lightFilter.pshot0 = {x: bullets.getAt(0).x, y: config.map.height - bullets.getAt(0).y };
         lightFilter.pshot1 = {x: bullets.getAt(1).x, y: config.map.height - bullets.getAt(1).y };
 
+        for (var i = 0;i < 4; i++) {
+            explosionAnimation = explosions.getAt(i);
+            if (explosionAnimation.animations.getAnimation('kaboom').isFinished) {
+                explosionAnimation.x = -300;
+                explosionAnimation.y = -300;
+                //explosionAnimation.y = config.map.height;
+            }
+        }
+
+        lightFilter.diameter = config.shader.diameter;
 		lightFilter.update();
 	}
 
@@ -311,6 +331,9 @@ function identifyShip(shipType, index) {
 }
 
 function bulletHitShip (ship, bullet) {
+    bullet.x = -300;
+    //bullet.y = config.map.height;
+    bullet.y = -300;
 	bullet.kill();
 	ship = identifyShip(ship.shipType, ship.index);
 	var dam = bulletDamage(ship.ship.shipType, bullet.group.shipType);
