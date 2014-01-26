@@ -9,8 +9,8 @@ function preload () {
     game.load.image('bullet', 'assets/games/tanks/bullet.png');
     game.load.image('earth', 'assets/games/tanks/scorched_earth.png');
     game.load.spritesheet('kaboom', 'assets/games/tanks/explosion.png', 64, 64, 23);
-    game.load.script('light', 'assets/filters/light.js');
-    game.load.script('fire', 'assets/filters/Fire.js');
+//    game.load.script('light', 'assets/filters/light.js');
+//    game.load.script('fire', 'assets/filters/Fire.js');
     
 }
 
@@ -49,9 +49,10 @@ function create () {
     healthbar.lineStyle(2, 0x00FF00, 1); // width, color (0x0000FF), alpha (0 -> 1) // required settings
     barback.beginFill(0x000000, 1);
     healthbar.beginFill(0x00FF00, 1);
-    game.world.setBounds(0,0,config.map.width,config.map.height);
     barback.drawRect(8, config.map.height - 8, 24, -104);
     healthBarRect = healthbar.drawRect(0, 0, 20, healthBarHeight);
+
+    game.world.setBounds(0,0,config.map.width,config.map.height);
 
     //  Our bullet group
     bullets = game.add.group();
@@ -65,17 +66,14 @@ function create () {
 	//Generate player
 	player = new PlayerShip(game, config.player.startX, config.player.startY, bullets, cursors); 
 
-    //  The enemies bullet group
+    //  Create some baddies to waste :)
     enemyBullets = game.add.group();
 	enemyBullets.shipType = "enemy";
     enemyBullets.createMultiple(config.bullet.enemyNumber, 'bullet');
     enemyBullets.setAll('anchor.x', 0.5);
     enemyBullets.setAll('anchor.y', 0.5);
     enemyBullets.setAll('outOfBoundsKill', true);
-
-    //  Create some baddies to waste :)
     enemies = [];
-
     for (var i = 0; i < config.enemy.number; i++)
     {
         enemies.push(new EnemyShip(i, game, game.world.randomX, game.world.randomY, enemyBullets, player));
@@ -88,20 +86,19 @@ function create () {
     friendBullets.setAll('anchor.x', 0.5);
     friendBullets.setAll('anchor.y', 0.5);
     friendBullets.setAll('outOfBoundsKill', true);
-
     friends = [];
-    for (var i = 0; i < config.friend.number; i++){
-	friends.push(new FriendlyShip(i, game, game.world.randomX, game.worldrandomY, friendBullets, player));
+    for (var i = 0; i < config.friend.number; i++) {
+        friends.push(new FriendlyShip(i, game, game.world.randomX, game.worldrandomY, friendBullets, player));
     }
 
-
-    for(var i=0; i<config.enemy.number; i++){
-	enemies[i].setOpponents(friends);
-	enemies[i].setAllies(enemies);
+    for(var i=0; i<config.enemy.number; i++) {
+        enemies[i].setOpponents(friends);
+        enemies[i].setAllies(enemies);
+        enemies[i].pushOpponent(player);
     }
-    for(var i=0; i<config.friend.number; i++){
-	friends[i].setOpponents(enemies);
-	friends[i].setAllies(friends);
+    for(var i=0; i<config.friend.number; i++) {
+        friends[i].setOpponents(enemies);
+        friends[i].setAllies(friends);
     }
     //  Explosion pool
     explosions = game.add.group();
@@ -190,7 +187,7 @@ function update () {
     //barback.drawRect(8, config.map.height - 8, 24, -104);
     //healthbar.drawRect(10, config.map.height - 10, 20, -100 + (100 * (player.health / config.player.health)));
 
-    //fireFilter.update();
+//    fireFilter.update();
 
 }
 

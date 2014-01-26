@@ -6,30 +6,27 @@ function AIShip(game, sprite, bullets, player) {
 	this.ship.angle = game.rnd.angle();
     this.rotationSpeed = 0.1; // rad/update
     this.setSpeed(100);
-    this.opponents = [];
-    this.opponents.push(player);
 	this.updateVelocity();
     this.target = player;
     var thisref = this;
 
     // Private variables
-    var firingDistance = 500;   // The distance within which a target will be fired at
-    var evasionDistance = 150;  // The distance within which this ship will begin to evade its target
-    var firingAngle = 0.1;      // The maximum angle of deviation outside of which we will not fire
+    var firingDistance = config.AIShip.firingDistance     || 800;   // The distance within which a target will be fired at
+    var evasionDistance = config.AIShip.evasionDistance   || 200;   // The distance within which this ship will begin to evade its target
+    var firingAngle = config.AIShip.firingAngle           || 0.1;   // The maximum angle of deviation outside of which we will not fire
     // Target prioritisation constants
-    var shotNumberWeight = 1;   // The weighting applied to the number of shots an opponent has taken
-    var proximityWeight = 1000; // The weighting given to the inverse of an opponent's proximity
+    var shotNumberWeight = config.AIShip.shotNumberWeight || 1;     // The weighting applied to the number of shots an opponent has taken
+    var proximityWeight = config.AIShip.proximityWeight   || 1000;  // The weighting given to the inverse of an opponent's proximity
 
     this.preloader = function(game) {
         game.load.atlas('enemy', 'assets/games/tanks/enemy-tanks.png', 'assets/games/tanks/tanks.json');
     };
 
-    this.update = function() {
-
+    this.update = function() 
+    {
         this.prioritiseTargets();
         this.decideStrategy();
         this.checkAndFire();
-
     };
 
     this.distanceToTarget = function()
@@ -39,7 +36,10 @@ function AIShip(game, sprite, bullets, player) {
 
     this.decideStrategy = function()
     {
-        if (this.distanceToTarget() < evasionDistance)
+        if (this.target == null)
+        {
+        }
+        else if (this.distanceToTarget() < evasionDistance)
         {
             this.evadeTarget();
         }
@@ -47,6 +47,12 @@ function AIShip(game, sprite, bullets, player) {
         {
             this.engageTarget();
         }
+    };
+
+    this.engageTarget = function() {
+        // Turn toward and follow our target
+        this.turn((this.getAngleToTarget() < 0) ? this.rotationSpeed : -this.rotationSpeed);
+        this.updateVelocity();
     };
 
     this.evadeTarget = function()
@@ -60,7 +66,8 @@ function AIShip(game, sprite, bullets, player) {
     {
         // Check if we're within firing range and facing our target, if we are,
         // shoot.
-        if ((this.distanceToTarget() < firingDistance) && 
+        if ((this.target != null) &&
+            (this.distanceToTarget() < firingDistance) && 
             (Math.abs(this.game.physics.angleBetween(this.ship, this.target.ship) - this.ship.rotation) < firingAngle))
         {
             this.fire();
@@ -68,18 +75,33 @@ function AIShip(game, sprite, bullets, player) {
     };
 
     this.prioritiseTargets = function() {
-        // Define the score function 
+        // Gets rid of any invalid opponents. We don't save this filtered array
+        // because our logic for filtering will probably change later
+        var filterFunc = function(el, index, arr)
+        {
+            return el.alive;
+        };
+        var filteredOpponents = this.opponents.filter(filterFunc);
+        // Calculates the score for each possible opponent. The opponent with
+        // the highest score will be selected as the target.
         var scoreFunc = function(el, index, arr)
         {
             return (proximityWeight / this.game.physics.distanceBetween(el.ship, thisref.ship)
                  + (shotNumberWeight * el.ship.numberOfShots));
         };
-        var maxScoreIndex = this.opponents
-            .map(scoreFunc)
-            .reduce(function(prevVal, currVal, ind, arr)
-                { return (arr[currVal] > arr[prevVal]) ? currVal : prevVal; }
-            , 0);
-        this.target = this.opponents[maxScoreIndex];
+        if (filteredOpponents && filteredOpponents.length > 0)
+        {
+            var maxScoreIndex = this.opponents
+                .map(scoreFunc)
+                .reduce(function(prevVal, currVal, ind, arr)
+                    { return (arr[currVal] > arr[prevVal]) ? currVal : prevVal; }
+                , 0);
+            this.target = this.opponents[maxScoreIndex];
+        }
+        else
+        {
+            this.target = null;
+        }
         // return minIndex;
         // 3) If there are friendly obstacles between this ship and the opponent,
         //   remove the opponent from the list of options
@@ -92,12 +114,6 @@ function AIShip(game, sprite, bullets, player) {
         var angleBetween = this.ship.rotation - this.game.physics.angleBetween(this.ship, this.target.ship);
         var angleBetween = ((angleBetween + Math.PI) % (2*Math.PI) - Math.PI);
         return angleBetween;
-    };
-
-    this.engageTarget = function() {
-        // Turn toward and follow our target
-        this.turn((this.getAngleToTarget() < 0) ? this.rotationSpeed : -this.rotationSpeed);
-        this.updateVelocity();
     };
 
 };
