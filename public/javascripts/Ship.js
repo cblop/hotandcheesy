@@ -14,21 +14,23 @@ Ship = function(game, sprite, bullets) {
 	
 	//Applies the sprite to the ship
 	this.ship = sprite;
-        this.ship.anchor.setTo(0.5, 0.5);
-        this.ship.bringToTop();
+    this.ship.anchor.setTo(0.5, 0.5);
+    this.ship.bringToTop();
 	//  This will force it to decelerate and limit its speed
-        //this.ship.body.drag.setTo(200, 200);
-        this.ship.body.maxVelocity.setTo(config.ship.maxVelX, config.ship.maxVelY);
+    //this.ship.body.drag.setTo(200, 200);
+    this.ship.body.maxVelocity.setTo(config.ship.maxVelX, config.ship.maxVelY);
 	//introduces collision with world
-        this.ship.body.collideWorldBounds = true;
-
-
+    this.ship.body.collideWorldBounds = true;
 	
 	this.setAllies = function(allies) {
 		this.allies = allies;}
+    this.pushAlly = function(ally) {
+        this.allies.push(ally); };
+
 	this.setOpponents = function(opponents) {
 		this.opponents = opponents;}
-
+    this.pushOpponent = function(opponent) {
+        this.opponents.push(opponent); };
 
 	this.turn = function(delRot) {
 		this.ship.rotation += delRot;
@@ -50,7 +52,7 @@ Ship = function(game, sprite, bullets) {
 		if (this.game.time.now > this.nextFire && this.bullets.countDead() > 0)
 		{
 		    this.nextFire = this.game.time.now + this.fireRate;
-		    var bullet = bullets.getFirstDead();
+		    var bullet = this.bullets.getFirstDead();
 		    bullet.reset(this.ship.x, this.ship.y);
 		    bullet.rotation = this.ship.rotation;
             this.game.physics.velocityFromRotation(this.ship.rotation, config.bullet.speed, bullet.body.velocity);
@@ -65,7 +67,7 @@ Ship = function(game, sprite, bullets) {
 	    {
 	        this.alive = false;
 	        this.ship.kill();
-		return true;
+            return true;
 	    }
 	    return false;
 	};
