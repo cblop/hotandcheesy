@@ -82,7 +82,10 @@ function create () {
     enemies = [];
     for (var i = 0; i < config.enemy.number; i++)
     {
-        enemies.push(new EnemyShip(i, game, game.world.randomX, game.world.randomY, enemyBullets, player));
+        //enemies in random positions
+		//enemies.push(new EnemyShip(i, game, game.world.randomX, game.world.randomY, enemyBullets, player));
+		//Enemies down right hand side
+		enemies.push(new EnemyShip(i, game, game.world.width - 50, game.world.randomY, enemyBullets, player));
         //enemies[i].ship.filters = [lightFilter];
     }
 	
@@ -95,7 +98,10 @@ function create () {
     friendBullets.setAll('outOfBoundsKill', true);
     friends = [];
     for (var i = 0; i < config.friend.number; i++) {
-        friends.push(new FriendlyShip(i, game, game.world.randomX, game.worldrandomY, friendBullets, player));
+       //Friens in random positions
+	   //friends.push(new FriendlyShip(i, game, game.world.randomX, game.worldrandomY, friendBullets, player));
+       //friends down left hand side
+	   friends.push(new FriendlyShip(i, game, 50, game.world.randomY, friendBullets, player));
     }
 
     for(var i=0; i<config.enemy.number; i++) {
