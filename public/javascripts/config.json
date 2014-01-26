@@ -2,13 +2,13 @@ var config = {
 	"map": {	
         "width": 1200, 
         "height": 600,
-		"lightEffectsOn": 0,
+		"lightEffectsOn": 1,
 		},
 
 	"bullet": {	
-        "friendNumber":     5, 
-        "enemyNumber":      20, 
-        "playerNumber":     30,
+        "friendNumber":     4, 
+        "enemyNumber":      4, 
+        "playerNumber":     2,
         "explosionNumber":  100,
         "speed":            1000, 
 		},
