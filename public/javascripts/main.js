@@ -331,13 +331,13 @@ function shipsCollide (shipA, shipB) {
 
     if (destroyedA)
     {
-        var explosionAnimation = explosions.getFirstDead();
+        var explosionAnimation = explosions.getFirstDead() || explosions.getFirstAlive();
         explosionAnimation.reset(shipA.ship.x, shipA.ship.y);
         explosionAnimation.play('kaboom', 30, false, true);
     }
     else if (destroyedB)
     {
-        var explosionAnimation = explosions.getFirstDead();
+        var explosionAnimation = explosions.getFirstDead() || explosions.getFirstAlive();
         explosionAnimation.reset(shipB.ship.x, shipB.ship.y);
         explosionAnimation.play('kaboom', 30, false, true);
     }
@@ -365,7 +365,13 @@ function bulletHitShip (ship, bullet) {
 	var destroyed = ship.damage(dam, game.physics.angleBetween(ship.ship, bullet));
 	//console.log(destroyed);
 	if(destroyed){
-		var explosionAnimation = explosions.getFirstDead();
+		var explosionAnimation = explosions.getFirstDead() || explosions.getFirstAlive();
+		/*if(explosions.getFirstDead()){
+			explosionAnimation = explosions.getFirstDead();
+		}else{
+			explosionAnimation = explosions.getFirstAlive();
+			explosionAnimation.kill();
+		}*/
 		explosionAnimation.reset(ship.ship.x, ship.ship.y);
 		explosionAnimation.play('kaboom', 30, false, true);
 	}
