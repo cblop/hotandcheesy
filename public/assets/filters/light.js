@@ -25,6 +25,7 @@ Phaser.Filter.Light = function (game, xval, yval) {
     this.uniforms.fshot1 = { type: '2f', value: {x: xval, y: yval} }
     this.uniforms.fshot2 = { type: '2f', value: {x: xval, y: yval} }
     this.uniforms.fshot3 = { type: '2f', value: {x: xval, y: yval} }
+    this.uniforms.diameter = { type: '1f', value: 100.0 };
 
     this.fragmentSrc = [
 
@@ -49,6 +50,8 @@ Phaser.Filter.Light = function (game, xval, yval) {
         "uniform float     red;",
         "uniform float     green;",
         "uniform float     blue;",
+        "uniform float     diameter;",
+
        "struct Light {",
             "vec2 pos;     // Light position",
             "float spread;    // Light spread",
@@ -106,13 +109,13 @@ Phaser.Filter.Light = function (game, xval, yval) {
             "float x_dis = lights[i].pos.x - gl_FragCoord.x;",
             "float y_dis = lights[i].pos.y - gl_FragCoord.y;",
             "float distance = sqrt(pow(x_dis, 2.0) + pow(y_dis, 2.0));",
-            "float sub_ints = 1.0 - distance / 50.0;",
+            "float sub_ints = 1.0 - distance / diameter;",
             "if(sub_ints < 0.0)",
                 "sub_ints = 0.0;",
 
             "intensity += sub_ints;}",
 
-        "gl_FragColor = vec4(intensity, 0.0, 0.0, 1.0-intensity);",
+        "gl_FragColor = vec4(0.2 * intensity, 0.2 * intensity, 0.4 * intensity, 1.0-intensity);",
 
 
         "}"
@@ -146,6 +149,18 @@ Object.defineProperty(Phaser.Filter.Light.prototype, 'alpha', {
 
     set: function(value) {
         this.uniforms.alpha.value = value;
+    }
+
+});
+
+Object.defineProperty(Phaser.Filter.Light.prototype, 'diameter', {
+
+    get: function() {
+        return this.uniforms.diameter.value;
+    },
+
+    set: function(value) {
+        this.uniforms.diameter.value = value;
     }
 
 });
