@@ -15,25 +15,16 @@ Phaser.Filter.Light = function (game, xval, yval) {
     this.uniforms.blue = { type: '1f', value: 2.0 }
     this.uniforms.pshot0 = { type: '2f', value: {x: xval, y: yval} }
     this.uniforms.pshot1 = { type: '2f', value: {x: xval, y: yval} }
-    this.uniforms.pshot2 = { type: '2f', value: {x: xval, y: yval} }
 
     this.uniforms.eshot0 = { type: '2f', value: {x: xval, y: yval} }
     this.uniforms.eshot1 = { type: '2f', value: {x: xval, y: yval} }
     this.uniforms.eshot2 = { type: '2f', value: {x: xval, y: yval} }
     this.uniforms.eshot3 = { type: '2f', value: {x: xval, y: yval} }
-    this.uniforms.eshot4 = { type: '2f', value: {x: xval, y: yval} }
-    this.uniforms.eshot5 = { type: '2f', value: {x: xval, y: yval} }
-    this.uniforms.eshot6 = { type: '2f', value: {x: xval, y: yval} }
-    this.uniforms.eshot7 = { type: '2f', value: {x: xval, y: yval} }
 
     this.uniforms.fshot0 = { type: '2f', value: {x: xval, y: yval} }
     this.uniforms.fshot1 = { type: '2f', value: {x: xval, y: yval} }
     this.uniforms.fshot2 = { type: '2f', value: {x: xval, y: yval} }
     this.uniforms.fshot3 = { type: '2f', value: {x: xval, y: yval} }
-    this.uniforms.fshot4 = { type: '2f', value: {x: xval, y: yval} }
-    this.uniforms.fshot5 = { type: '2f', value: {x: xval, y: yval} }
-    this.uniforms.fshot6 = { type: '2f', value: {x: xval, y: yval} }
-    this.uniforms.fshot7 = { type: '2f', value: {x: xval, y: yval} }
 
     this.fragmentSrc = [
 
@@ -42,69 +33,36 @@ Phaser.Filter.Light = function (game, xval, yval) {
 
         "uniform vec2 pshot0;",
         "uniform vec2 pshot1;",
-        "uniform vec2 pshot2;",
 
         "uniform vec2 eshot0;",
         "uniform vec2 eshot1;",
         "uniform vec2 eshot2;",
         "uniform vec2 eshot3;",
-        "uniform vec2 eshot4;",
-        "uniform vec2 eshot5;",
-        "uniform vec2 eshot6;",
-        "uniform vec2 eshot7;",
 
         "uniform vec2 fshot0;",
         "uniform vec2 fshot1;",
         "uniform vec2 fshot2;",
         "uniform vec2 fshot3;",
-        "uniform vec2 fshot4;",
-        "uniform vec2 fshot5;",
-        "uniform vec2 fshot6;",
-        "uniform vec2 fshot7;",
 
         "uniform float     time;",
         "uniform float     alpha;",
         "uniform float     red;",
         "uniform float     green;",
         "uniform float     blue;",
-        "const int ecount = 2;",
-        "vec2 eshots[ecount];",
        "struct Light {",
             "vec2 pos;     // Light position",
             "float spread;    // Light spread",
             "float size;   // Light bulb size",
         "};",
-        "Light lights[19];",
+        "Light lights[10];",
 
         "void main(void) {",
-        /*
-        "eshots[0] = eshot0;",
-        "eshots[1] = eshot1;",
-        "float radius = 1000.0;",
-        "vec3 totalLighting = vec3(0.0, 0.0, 0.0);",
-        "for(int i=1; i<ecount; i++) {",
-        //"vec2 uPos = gl_FragCoord.xy / resolution.xy;",
-            "vec2 lightPosition = eshots[i];",
-            "float distance  = length( lightPosition - gl_FragCoord.xy );",
-            "float maxDistance = pow( radius, 0.20);",
-            "float quadDistance = pow( distance, 0.23);",
-            "float quadIntensity = 1.0 - min( quadDistance, maxDistance )/maxDistance;",
-            //"vec4 color = vec4(red, green, blue, alpha);",
-            "totalLighting += quadDistance;",
-        "}",
-        //"gl_FragColor = uPos * quadIntensity;",
-        //"vec4 color = vec4(red, green, blue, alpha);",
-        "gl_FragColor = vec4(totalLighting, 1.0);",
-        */
 
         "Light p0;",
         "p0.pos = pshot0;",
 
         "Light p1;",
         "p1.pos = pshot1;",
-
-        "Light p2;",
-        "p2.pos = pshot2;",
 
         "Light e0;",
         "e0.pos = eshot0;",
@@ -118,18 +76,6 @@ Phaser.Filter.Light = function (game, xval, yval) {
         "Light e3;",
         "e3.pos = eshot3;",
 
-        "Light e4;",
-        "e4.pos = eshot4;",
-
-        "Light e5;",
-        "e5.pos = eshot5;",
-
-        "Light e6;",
-        "e6.pos = eshot6;",
-
-        "Light e7;",
-        "e7.pos = eshot7;",
-
         "Light f0;",
         "f0.pos = fshot0;",
 
@@ -142,40 +88,20 @@ Phaser.Filter.Light = function (game, xval, yval) {
         "Light f3;",
         "f3.pos = fshot3;",
 
-        "Light f4;",
-        "f4.pos = fshot4;",
-
-        "Light f5;",
-        "f5.pos = fshot5;",
-
-        "Light f6;",
-        "f6.pos = fshot6;",
-
-        "Light f7;",
-        "f7.pos = fshot7;",
 
         "float intensity = 0.0;",
         "lights[0] = e0;",
         "lights[1] = e1;",
         "lights[2] = e2;",
         "lights[3] = e3;",
-        "lights[4] = e4;",
-        "lights[5] = e5;",
-        "lights[6] = e6;",
-        "lights[7] = e7;",
-        "lights[8] = p0;",
-        "lights[9] = p1;",
-        "lights[10] = p2;",
-        "lights[11] = f0;",
-        "lights[12] = f1;",
-        "lights[13] = f2;",
-        "lights[14] = f3;",
-        "lights[15] = f4;",
-        "lights[16] = f5;",
-        "lights[17] = f6;",
-        "lights[18] = f7;",
+        "lights[4] = p0;",
+        "lights[5] = p1;",
+        "lights[6] = f0;",
+        "lights[7] = f1;",
+        "lights[8] = f2;",
+        "lights[9] = f3;",
 
-        "for(int i = 0; i < 19; i++){",
+        "for(int i = 0; i < 10; i++){",
 
             "float x_dis = lights[i].pos.x - gl_FragCoord.x;",
             "float y_dis = lights[i].pos.y - gl_FragCoord.y;",
@@ -298,18 +224,12 @@ Object.defineProperty(Phaser.Filter.Light.prototype, 'pshot1', {
         this.uniforms.pshot1.value = value;}
 });
 
-Object.defineProperty(Phaser.Filter.Light.prototype, 'pshot2', {
-    get: function() {
-        return this.uniforms.pshot2.value;},
-    set: function(value) {
-        this.uniforms.pshot2.value = value;}
-});
 
 Object.defineProperty(Phaser.Filter.Light.prototype, 'fshot0', {
     get: function() {
         return this.uniforms.fshot0.value;},
     set: function(value) {
-        this.uniforms.pshot0.value = value;}
+        this.uniforms.fshot0.value = value;}
 });
 
 Object.defineProperty(Phaser.Filter.Light.prototype, 'fshot1', {
@@ -333,33 +253,6 @@ Object.defineProperty(Phaser.Filter.Light.prototype, 'fshot3', {
         this.uniforms.fshot3.value = value;}
 });
 
-Object.defineProperty(Phaser.Filter.Light.prototype, 'fshot4', {
-    get: function() {
-        return this.uniforms.fshot4.value;},
-    set: function(value) {
-        this.uniforms.fshot4.value = value;}
-});
-
-Object.defineProperty(Phaser.Filter.Light.prototype, 'fshot5', {
-    get: function() {
-        return this.uniforms.fshot5.value;},
-    set: function(value) {
-        this.uniforms.fshot5.value = value;}
-});
-
-Object.defineProperty(Phaser.Filter.Light.prototype, 'fshot6', {
-    get: function() {
-        return this.uniforms.fshot6.value;},
-    set: function(value) {
-        this.uniforms.fshot6.value = value;}
-});
-
-Object.defineProperty(Phaser.Filter.Light.prototype, 'fshot7', {
-    get: function() {
-        return this.uniforms.fshot7.value;},
-    set: function(value) {
-        this.uniforms.fshot7.value = value;}
-});
 
 Object.defineProperty(Phaser.Filter.Light.prototype, 'eshot0', {
     get: function() {
@@ -387,33 +280,5 @@ Object.defineProperty(Phaser.Filter.Light.prototype, 'eshot3', {
         return this.uniforms.eshot3.value;},
     set: function(value) {
         this.uniforms.eshot3.value = value;}
-});
-
-Object.defineProperty(Phaser.Filter.Light.prototype, 'eshot4', {
-    get: function() {
-        return this.uniforms.eshot4.value;},
-    set: function(value) {
-        this.uniforms.eshot4.value = value;}
-});
-
-Object.defineProperty(Phaser.Filter.Light.prototype, 'eshot5', {
-    get: function() {
-        return this.uniforms.eshot5.value;},
-    set: function(value) {
-        this.uniforms.eshot5.value = value;}
-});
-
-Object.defineProperty(Phaser.Filter.Light.prototype, 'eshot6', {
-    get: function() {
-        return this.uniforms.eshot6.value;},
-    set: function(value) {
-        this.uniforms.eshot6.value = value;}
-});
-
-Object.defineProperty(Phaser.Filter.Light.prototype, 'eshot7', {
-    get: function() {
-        return this.uniforms.eshot7.value;},
-    set: function(value) {
-        this.uniforms.eshot7.value = value;}
 });
 
