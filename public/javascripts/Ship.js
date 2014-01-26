@@ -61,7 +61,7 @@ Ship = function(game, sprite, bullets) {
 		    bullet.reset(this.ship.x, this.ship.y);
 		    bullet.rotation = this.ship.rotation;
             this.game.physics.velocityFromRotation(this.ship.rotation, config.bullet.speed, bullet.body.velocity);
-            this.numberOfShots++;
+            this.numberOfShots+=1;
 		}
 
 	};
