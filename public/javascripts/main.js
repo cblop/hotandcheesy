@@ -10,7 +10,7 @@ function preload () {
     game.load.script('light', 'assets/filters/light.js');
 	game.load.image('shield','assets/ships/shield.png');
 	game.load.image('stars','assets/ships/stars.png');
-}
+};
 
 var stars;
 
@@ -135,8 +135,8 @@ function create () {
 
     if(config.map.lightEffectsOn == "1")
 	{
-	lightFilter = game.add.filter('Light', config.map.width, config.map.height);
-    background.filters = [lightFilter];
+        lightFilter = game.add.filter('Light', config.map.width, config.map.height);
+        background.filters = [lightFilter];
 	}
 	barback = game.add.graphics(0, 0);
     healthbar = game.add.graphics(10, config.map.height - healthBarHeight - 10);
@@ -146,6 +146,14 @@ function create () {
     healthbar.beginFill(0x00FF00, 1);
     barback.drawRect(8, config.map.height - 8, 24, -104);
     healthBarRect = healthbar.drawRect(0, 0, 20, healthBarHeight);
+
+    splashText(game, "In a crippled ship in the depths of space, your last chance of " +
+                     "survival is relying on the light of battle to survive. While " +
+                     "your allies will do their best to help you, you must fend for " +
+                     "yourself to wipe out the enemy ships. While firing your weapons " +
+                     "illuminates a path, it also draw the attention of the enemies.", 30, 0,
+                     function() { splashText(game, "Use the arrow keys to move, space-bar to shoot.", 5, 0); }
+                     );
 }
 
 function beginNewGame(ln)
@@ -194,9 +202,9 @@ function update () {
 //game over
 	if(player.alive == false)
 	{
-		//alert("You be dead!");
-		levelNumber = 1;
+		levelNumber = config.enemy.number;
 		beginNewGame(levelNumber);
+        splashText(game, "You LOSE. Back to level " + levelNumber, 2, 0, null);
 	}
 	var allEnemiesDead = true;
 	for (var i = 0; i < enemies.length; i++)
@@ -209,8 +217,8 @@ function update () {
 	}
 	if(allEnemiesDead)
 	{
-		//alert("WINNAH!");
 		beginNewGame(levelNumber*=2);
+        splashText(game, "Sweet. Onto level " + levelNumber, 2, 0, null);
 	}
 
     var result = false;
