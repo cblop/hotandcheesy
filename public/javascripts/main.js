@@ -33,6 +33,9 @@ var healthBarRect;
 var lightFilter;
 var fireFilter;
 var background;
+var renderGroup;
+
+var playerCover;
 
 function dSpace(e){if((e.keyCode==32)&&(!e.shiftKey)){e.preventDefault();}}
 window.addEventListener('keydown',dSpace,true);void 0;
@@ -42,6 +45,7 @@ function create () {
 
     // TODO: Health bar is terrible hack. There MUST be a better mechanism for
     // this. (See also the health bar code in the update function).
+
     barback = game.add.graphics(0, 0);
     healthbar = game.add.graphics(10, config.map.height - healthBarHeight - 10);
     barback.lineStyle(2, 0xFFFFFF, 1); // width, color (0x0000FF), alpha (0 -> 1) // required settings
@@ -70,12 +74,18 @@ function create () {
     enemyBullets.setAll('anchor.y', 0.5);
     enemyBullets.setAll('outOfBoundsKill', true);
 
+
+    // Need one filter per bullet?
+
+    //player.ship.filters = [lightFilter];
+
     //  Create some baddies to waste :)
     enemies = [];
 
     for (var i = 0; i < config.enemy.number; i++)
     {
         enemies.push(new EnemyShip(i, game, game.world.randomX, game.world.randomY, enemyBullets, player));
+        //enemies[i].ship.filters = [lightFilter];
     }
 
     //  Explosion pool
@@ -91,15 +101,16 @@ function create () {
     game.camera.focusOnXY(0, 0);
 
     cursors = game.input.keyboard.createCursorKeys();
-
     background = game.add.sprite(0, 0);
     background.width = config.map.width;
     background.height = config.map.width;
-    fireFilter = game.add.filter('Fire', config.map.width, config.map.height);
     lightFilter = game.add.filter('Light', config.map.width, config.map.height);
-    fireFilter.alpha = 0.0;
-    lightFilter.alpha = 0.0;
+    lightFilter.alpha = 1.0;
+
+    //renderGroup.add(enemies);
+    //renderGroup.add(explosions);
     background.filters = [lightFilter];
+
 
 
 }
@@ -144,21 +155,16 @@ function update () {
     healthbar.drawRect(10, config.map.height - 10, 20, -100 + (100 * (player.health / config.player.health)));
 */
 
-    /*
-    for (var i = 0; i < config.bullet.playerNumber; i++) {
-
-
-    }
-    */
-
     //console.log(bullets.getAt(0).x);
     //lightFilter.update(bullets.getAt(0).x, bullets.getAt(0).y);
+
     lightFilter.xpos = bullets.getAt(0).x;
     lightFilter.ypos = config.map.height - bullets.getAt(0).y;
     lightFilter.update();
 
     healthbar.y = config.map.height - healthBarHeight - 10 + 100 * (1 - (player.health / config.player.health));
     healthbar.scale.y = (player.health / config.player.health);
+
     // This was extant after a merge. Resolving conflict by commenting. This is
     // because I *think* this code is old and incorrect. (Matt K).
     //barback.drawRect(8, config.map.height - 8, 24, -104);

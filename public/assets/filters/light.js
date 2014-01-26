@@ -6,12 +6,10 @@ Phaser.Filter.Light = function (game, xval, yval) {
 
     Phaser.Filter.call(this, game);
 
-    this.uniforms.alpha = { type: '1f', value: 1 }
-    this.uniforms.thickness = { type: '1f', value: 70.0 }
-    this.uniforms.speed = { type: '1f', value: 1.0 }
-    this.uniforms.red = { type: '1f', value: 2.0 }
+    this.uniforms.alpha = { type: '1f', value: 1.0 }
+    this.uniforms.red = { type: '1f', value: 1.0 }
     this.uniforms.green = { type: '1f', value: 1.0 }
-    this.uniforms.blue = { type: '1f', value: 1.0 }
+    this.uniforms.blue = { type: '1f', value: 2.0 }
     this.uniforms.xpos = { type: '1f', value: xval }
     this.uniforms.ypos = { type: '1f', value: yval }
         
@@ -23,8 +21,6 @@ Phaser.Filter.Light = function (game, xval, yval) {
         "uniform float ypos;",
         "uniform float     time;",
         "uniform float     alpha;",
-        "uniform float     thickness;",
-        "uniform float     speed;",
         "uniform float     red;",
         "uniform float     green;",
         "uniform float     blue;",
@@ -36,10 +32,9 @@ Phaser.Filter.Light = function (game, xval, yval) {
         "float maxDistance = pow( radius, 0.20);",
         "float quadDistance = pow( distance, 0.23);",
         "float quadIntensity = 1.0 - min( quadDistance, maxDistance )/maxDistance;",
-        //"vec4 uPos = texture2D(iChannel0, gl_FragCoord.xy / resolution.xy);",
-        "vec4 uPos = vec4(1.0, 1.0, 1.0, 1.0);",
+        "vec4 color = vec4(red, green, blue, alpha);",
         //"vec2 uPos = gl_FragCoord.xy / resolution.xy;",
-        "gl_FragColor = uPos * vec4(quadIntensity);",
+        "gl_FragColor = color * vec4(quadIntensity, quadIntensity, quadIntensity, 1.0 - quadIntensity);",
         //"gl_FragColor = uPos * quadIntensity;",
 
         "}"
