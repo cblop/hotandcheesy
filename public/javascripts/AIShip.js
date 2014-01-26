@@ -38,7 +38,7 @@ function AIShip(game, sprite, bullets, player) {
     {
         if (this.target == null)
         {
-            alert("Got a null target!");
+            // Random movement
         }
         else if (this.distanceToTarget() < evasionDistance)
         {
@@ -90,8 +90,6 @@ function AIShip(game, sprite, bullets, player) {
             return (proximityWeight / this.game.physics.distanceBetween(el.ship, thisref.ship)
                  + (shotNumberWeight * el.ship.numberOfShots));
         };
-        console.log(filteredOpponents);
-        console.log(filteredOpponents.length);
         if (filteredOpponents && filteredOpponents.length > 0)
         {
             var maxScoreIndex = filteredOpponents
@@ -105,7 +103,6 @@ function AIShip(game, sprite, bullets, player) {
         {
             this.target = null;
         }
-        console.log(this.target);
         // return minIndex;
         // 3) If there are friendly obstacles between this ship and the opponent,
         //   remove the opponent from the list of options
