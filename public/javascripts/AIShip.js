@@ -4,21 +4,35 @@ function AIShip(game, sprite, bullets, player) {
 	this.ship.body.immovable = false;
 	this.ship.body.bounce.setTo(1, 1);
 	this.ship.angle = game.rnd.angle();
-    this.rotationSpeed = 0.1; // rad/update
-    this.setSpeed(100);
-	this.updateVelocity();
     this.target = player;
     var thisref = this;
 
-    // Private variables
+    // Public config variables
+    this.rotationSpeed = config.AIShip.rotationSpeed      || 0.1;   // The rotation speed of an AI ship in radians per frame
+    this.setSpeed( config.AIShip.rotationSpeed            || 100);  // The ship forward speed
+
+    // Private config variables
     var firingDistance = config.AIShip.firingDistance     || 800;   // The distance within which a target will be fired at
     var evasionDistance = config.AIShip.evasionDistance   || 200;   // The distance within which this ship will begin to evade its target
+    var minWallProximity = config.AIShip.minWallProximity ||        // |
+                           config.AIShip.evasionDistance  ||        // | The closest we'll get to a wall before getting scared
+                           200;                                     // |
     var firingAngle = config.AIShip.firingAngle           || 0.1;   // The maximum angle of deviation outside of which we will not fire
     // Target prioritisation constants
-    var shotNumberWeight = config.AIShip.shotNumberWeight || 1;     // The weighting applied to the number of shots an opponent has taken
-    var proximityWeight = config.AIShip.proximityWeight   || 1000;  // The weighting given to the inverse of an opponent's proximity
+    var shotNumberWeight = config.AIShip.shotNumberWeight || 0.4;   // The weighting applied to the number of shots an opponent has taken
+    var proximityWeight = config.AIShip.proximityWeight   || 10000; // The weighting given to the inverse of an opponent's proximity
 
-    this.preloader = function(game) {
+    // Initialise our velocity
+	this.updateVelocity();
+
+    var modRotation = function(rot)
+    {
+        // Transform the rotation to be between -pi and pi
+        return ((rot + Math.PI) % (2 * Math.PI) - Math.PI);
+    };
+
+    this.preloader = function(game) 
+    {
         game.load.atlas('enemy', 'assets/games/tanks/enemy-tanks.png', 'assets/games/tanks/tanks.json');
     };
 
@@ -40,7 +54,11 @@ function AIShip(game, sprite, bullets, player) {
     {
         if (this.target == null)
         {
-            // Game over - random movement? Reset?
+            // No targets acquired.. Random movement?
+        }
+        else if (this.tooCloseToWall())
+        {
+            this.turnAwayFromWall();
         }
         else if (this.distanceToTarget() < evasionDistance)
         {
@@ -52,7 +70,75 @@ function AIShip(game, sprite, bullets, player) {
         }
     };
 
-    this.engageTarget = function() {
+    this.facingWall = function()
+    {
+        
+    };
+
+    this.tooCloseToWall = function()
+    {
+        return ((this.ship.x > config.map.width - minWallProximity)
+             || (this.ship.x < minWallProximity)
+             || (this.ship.y < minWallProximity)
+             || (this.ship.y > config.map.height - minWallProximity));
+    };
+
+    // The distance to the wall we're facing
+    this.distanceToWall = function()
+    {
+        if (modRotation(this.ship.rotation) < 0)
+        {
+            // If we're facing below horizontal
+        }
+        else
+        {
+            // If we're facing above horizontal
+
+        }
+    };
+
+    this.rotateCounterClockwise = function()
+    {
+        this.turn(-this.rotationSpeed);
+        this.updateVelocity();
+    };
+
+    this.rotateClockwise = function()
+    {
+        this.turn(this.rotationSpeed);
+        this.updateVelocity();
+    };
+
+    this.turnAwayFromWall = function()
+    {
+        if (this.ship.x > config.map.width - minWallProximity)
+        {
+            (modRotation(this.ship.rotation) < 0) ?
+                this.rotateCounterClockwise() :
+                this.rotateClockwise();
+        }
+        else if (this.ship.x < minWallProximity)
+        {
+            (modRotation(this.ship.rotation) > 0) ?
+                this.rotateCounterClockwise() :
+                this.rotateClockwise();
+        }
+        else if (this.ship.y < minWallProximity)
+        {
+            (Math.abs(modRotation(this.ship.rotation)) > Math.PI / 2) ?
+                this.rotateCounterClockwise() :
+                this.rotateClockwise();
+        }
+        else if (this.ship.y > config.map.height - minWallProximity)
+        {
+            (Math.abs(modRotation(this.ship.rotation)) < Math.PI / 2) ?
+                this.rotateCounterClockwise() :
+                this.rotateClockwise();
+        }
+    };
+
+    this.engageTarget = function() 
+    {
         // Turn toward and follow our target
         this.turn((this.getAngleToTarget() < 0) ? this.rotationSpeed : -this.rotationSpeed);
         this.updateVelocity();
@@ -77,7 +163,8 @@ function AIShip(game, sprite, bullets, player) {
         }
     };
 
-    this.selectTarget = function() {
+    this.selectTarget = function() 
+    {
         // Gets rid of any invalid opponents. We don't save this filtered array
         // because our logic for filtering will probably change later
         var filterFunc = function(el, index, arr)
@@ -113,10 +200,9 @@ function AIShip(game, sprite, bullets, player) {
         // 5) Consider opponent velocity in target acquisition(?)
     };
 
-    this.getAngleToTarget = function() {
-        var angleBetween = this.ship.rotation - this.game.physics.angleBetween(this.ship, this.target.ship);
-        var angleBetween = ((angleBetween + Math.PI) % (2*Math.PI) - Math.PI);
-        return angleBetween;
+    this.getAngleToTarget = function() 
+    {
+        return modRotation(this.ship.rotation - this.game.physics.angleBetween(this.ship, this.target.ship));
     };
 
 };
