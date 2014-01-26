@@ -38,7 +38,7 @@ function AIShip(game, sprite, bullets, player) {
     {
         if (this.target == null)
         {
-            // Random movement
+            // Game over - random movement? Reset?
         }
         else if (this.distanceToTarget() < evasionDistance)
         {
@@ -87,8 +87,11 @@ function AIShip(game, sprite, bullets, player) {
         // the highest score will be selected as the target.
         var scoreFunc = function(el, index, arr)
         {
-            return (proximityWeight / this.game.physics.distanceBetween(el.ship, thisref.ship)
-                 + (shotNumberWeight * el.ship.numberOfShots));
+//            if (player == el)
+//            console.log((proximityWeight / this.game.physics.distanceBetween(el.ship, thisref.ship))
+//                 +  (shotNumberWeight * el.numberOfShots));
+            return ((proximityWeight / this.game.physics.distanceBetween(el.ship, thisref.ship))
+                 +  (shotNumberWeight * el.numberOfShots));
         };
         if (filteredOpponents && filteredOpponents.length > 0)
         {
