@@ -8,8 +8,8 @@ var config = {
 	"bullet": {	
         "friendNumber":     4, 
         "enemyNumber":      4, 
-        "playerNumber":     2,
-        "explosionNumber":  4,
+        "playerNumber":     3,
+        "explosionNumber":  10,
         "speed":            1000, 
 		},
 
