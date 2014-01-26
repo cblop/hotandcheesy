@@ -38,7 +38,6 @@ function AIShip(game, sprite, bullets, player) {
     {
         if (this.target == null)
         {
-            alert("FUCKING DILDOS!");
         }
         else if (this.distanceToTarget() < evasionDistance)
         {
@@ -101,7 +100,6 @@ function AIShip(game, sprite, bullets, player) {
         }
         else
         {
-            alert("DILLLLLLDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOS");
             this.target = null;
         }
         // return minIndex;
