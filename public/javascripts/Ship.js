@@ -63,7 +63,6 @@ Ship = function(game, sprite, bullets) {
             this.game.physics.velocityFromRotation(this.ship.rotation, config.bullet.speed, bullet.body.velocity);
             this.numberOfShots+=1;
 		}
-
 	};
 
 	this.damage = function(amount, angleOfAttack) {
