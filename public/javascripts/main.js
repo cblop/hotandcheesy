@@ -101,7 +101,7 @@ function create () {
     for(var i=0; i<config.enemy.number; i++) {
         enemies[i].setOpponents(friends);
         enemies[i].setAllies(enemies);
-        //enemies[i].pushOpponent(player);
+        enemies[i].pushOpponent(player);
     }
     for(var i=0; i<config.friend.number; i++) {
         friends[i].setOpponents(enemies);
