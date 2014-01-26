@@ -87,9 +87,6 @@ function AIShip(game, sprite, bullets, player) {
         // the highest score will be selected as the target.
         var scoreFunc = function(el, index, arr)
         {
-//            if (player == el)
-//            console.log((proximityWeight / this.game.physics.distanceBetween(el.ship, thisref.ship))
-//                 +  (shotNumberWeight * el.numberOfShots));
             return ((proximityWeight / this.game.physics.distanceBetween(el.ship, thisref.ship))
                  +  (shotNumberWeight * el.numberOfShots));
         };

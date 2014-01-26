@@ -54,8 +54,8 @@ var config = {
         "firingDistance":   800,
         "evasionDistance":  200,
         "firingAngle":      0.1,
-        "shotNumberWeight": 100000,
-        "proximityWeight":  1000,
+        "shotNumberWeight": 0.4,
+        "proximityWeight":  10000,
         }
 		
 };
