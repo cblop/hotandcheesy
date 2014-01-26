@@ -216,7 +216,7 @@ function update () {
 }
 
 function shipsCollide (shipA, shipB) {
-    console.log("collide");
+    //console.log("collide");
 
     var shipA = identifyShip(shipA.shipType, shipA.index);
     var shipB = identifyShip(shipB.shipType, shipB.index);
@@ -254,7 +254,7 @@ function bulletHitShip (ship, bullet) {
 	ship = identifyShip(ship.shipType, ship.index);
 	var dam = bulletDamage(ship.ship.shipType, bullet.group.shipType);
 	var destroyed = ship.damage(dam);
-	console.log(destroyed);
+	//console.log(destroyed);
 	if(destroyed){
 		var explosionAnimation = explosions.getFirstDead();
 		explosionAnimation.reset(ship.ship.x, ship.ship.y);
