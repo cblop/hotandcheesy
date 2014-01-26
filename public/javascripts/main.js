@@ -147,13 +147,14 @@ function create () {
     barback.drawRect(8, config.map.height - 8, 24, -104);
     healthBarRect = healthbar.drawRect(0, 0, 20, healthBarHeight);
 
-    splashText(game, "In a crippled ship in the depths of space, your last chance of " +
+/*    splashText(game, "In a crippled ship in the depths of space, your last chance of " +
                      "survival is relying on the light of battle to survive. While " +
                      "your allies will do their best to help you, you must fend for " +
                      "yourself to wipe out the enemy ships. While firing your weapons " +
-                     "illuminates a path, it also draw the attention of the enemies.", 15, 0,
+                     "illuminates a path, it also draw the attention of the enemies.", 10, 0,
                      function() { splashText(game, "Use the arrow keys to move, space-bar to shoot.", 5, 0); }
-                     );
+                     ); */
+     function() { splashText(game, "Use the arrow keys to move, space-bar to shoot.", 5, 0); }
 }
 
 function beginNewGame(ln)
