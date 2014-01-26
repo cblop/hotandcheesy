@@ -216,8 +216,22 @@ function update () {
         lightFilter.eshot3 = {x: enemyBullets.getAt(3).x, y: config.map.height - enemyBullets.getAt(3).y };
         lightFilter.eshot4 = {x: enemyBullets.getAt(4).x, y: config.map.height - bullets.getAt(4).y };
         lightFilter.eshot5 = {x: enemyBullets.getAt(5).x, y: config.map.height - enemyBullets.getAt(5).y };
-        lightFilter.eshot6 = {x: enemyBullets.getAt(6).x, y: config.map.height - bullets.getAt(4).y };
+        lightFilter.eshot6 = {x: enemyBullets.getAt(6).x, y: config.map.height - enemyBullets.getAt(4).y };
         lightFilter.eshot7 = {x: enemyBullets.getAt(7).x, y: config.map.height - enemyBullets.getAt(5).y };
+
+        lightFilter.fshot0 = {x: friendBullets.getAt(0).x, y: config.map.height - friendBullets.getAt(0).y };
+        lightFilter.fshot1 = {x: friendBullets.getAt(1).x, y: config.map.height - friendBullets.getAt(1).y };
+        lightFilter.fshot2 = {x: friendBullets.getAt(2).x, y: config.map.height - friendBullets.getAt(2).y };
+        lightFilter.fshot3 = {x: friendBullets.getAt(3).x, y: config.map.height - friendBullets.getAt(3).y };
+        lightFilter.fshot4 = {x: friendBullets.getAt(4).x, y: config.map.height - friendBullets.getAt(4).y };
+        lightFilter.fshot5 = {x: friendBullets.getAt(5).x, y: config.map.height - friendBullets.getAt(5).y };
+        lightFilter.fshot6 = {x: friendBullets.getAt(6).x, y: config.map.height - friendBullets.getAt(6).y };
+        lightFilter.fshot7 = {x: friendBullets.getAt(7).x, y: config.map.height - friendBullets.getAt(7).y };
+
+        lightFilter.pshot0 = {x: bullets.getAt(0).x, y: config.map.height - bullets.getAt(0).y };
+        lightFilter.pshot1 = {x: bullets.getAt(1).x, y: config.map.height - bullets.getAt(1).y };
+        lightFilter.pshot2 = {x: bullets.getAt(2).x, y: config.map.height - bullets.getAt(2).y };
+
 		lightFilter.update();
 	}
 

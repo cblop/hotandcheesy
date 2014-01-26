@@ -74,7 +74,7 @@ Phaser.Filter.Light = function (game, xval, yval) {
             "float spread;    // Light spread",
             "float size;   // Light bulb size",
         "};",
-        "Light lights[8];",
+        "Light lights[19];",
 
         "void main(void) {",
         /*
@@ -96,6 +96,16 @@ Phaser.Filter.Light = function (game, xval, yval) {
         //"vec4 color = vec4(red, green, blue, alpha);",
         "gl_FragColor = vec4(totalLighting, 1.0);",
         */
+
+        "Light p0;",
+        "p0.pos = pshot0;",
+
+        "Light p1;",
+        "p1.pos = pshot1;",
+
+        "Light p2;",
+        "p2.pos = pshot2;",
+
         "Light e0;",
         "e0.pos = eshot0;",
 
@@ -120,6 +130,30 @@ Phaser.Filter.Light = function (game, xval, yval) {
         "Light e7;",
         "e7.pos = eshot7;",
 
+        "Light f0;",
+        "f0.pos = fshot0;",
+
+        "Light f1;",
+        "f1.pos = fshot1;",
+
+        "Light f2;",
+        "f2.pos = fshot2;",
+
+        "Light f3;",
+        "f3.pos = fshot3;",
+
+        "Light f4;",
+        "f4.pos = fshot4;",
+
+        "Light f5;",
+        "f5.pos = fshot5;",
+
+        "Light f6;",
+        "f6.pos = fshot6;",
+
+        "Light f7;",
+        "f7.pos = fshot7;",
+
         "float intensity = 0.0;",
         "lights[0] = e0;",
         "lights[1] = e1;",
@@ -129,8 +163,19 @@ Phaser.Filter.Light = function (game, xval, yval) {
         "lights[5] = e5;",
         "lights[6] = e6;",
         "lights[7] = e7;",
+        "lights[8] = p0;",
+        "lights[9] = p1;",
+        "lights[10] = p2;",
+        "lights[11] = f0;",
+        "lights[12] = f1;",
+        "lights[13] = f2;",
+        "lights[14] = f3;",
+        "lights[15] = f4;",
+        "lights[16] = f5;",
+        "lights[17] = f6;",
+        "lights[18] = f7;",
 
-        "for(int i = 0; i < 8; i++){",
+        "for(int i = 0; i < 19; i++){",
 
             "float x_dis = lights[i].pos.x - gl_FragCoord.x;",
             "float y_dis = lights[i].pos.y - gl_FragCoord.y;",
