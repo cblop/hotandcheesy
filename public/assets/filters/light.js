@@ -27,7 +27,7 @@ Phaser.Filter.Light = function (game, xval, yval) {
 
         "void main(void) {",
         "vec2 lightPosition = vec2(xpos, ypos);",
-        "float radius = 350.0;",
+        "float radius = 1000.0;",
         "float distance  = length( lightPosition - gl_FragCoord.xy );",
         "float maxDistance = pow( radius, 0.20);",
         "float quadDistance = pow( distance, 0.23);",
