@@ -18,14 +18,15 @@ var land;
 
 var player;
 
-var enemies;
+var enemies = [];
+var friends = [];
 var enemyBullets;
 var friendBullets;
 var explosions;
 var cursors;
 var bullets;
 var circle;
-
+var levelNumber;
 var healthbar;
 var barback;
 var healthBarHeight = 100;
@@ -45,10 +46,9 @@ window.addEventListener('keydown',dSpace,true);void 0;
 
 
 function create () {
-
     // TODO: Health bar is terrible hack. There MUST be a better mechanism for
     // this. (See also the health bar code in the update function).
-
+	levelNumber = config.enemy.number;
     barback = game.add.graphics(0, 0);
     healthbar = game.add.graphics(10, config.map.height - healthBarHeight - 10);
     barback.lineStyle(2, 0xFFFFFF, 1); // width, color (0x0000FF), alpha (0 -> 1) // required settings
@@ -58,63 +58,37 @@ function create () {
     barback.drawRect(8, config.map.height - 8, 24, -104);
     healthBarRect = healthbar.drawRect(0, 0, 20, healthBarHeight);
 
+	
     game.world.setBounds(0,0,config.map.width,config.map.height);
+	cursors = game.input.keyboard.createCursorKeys();
+	
+	//player = new PlayerShip(game, config.player.startX, config.player.startY, bullets, cursors); 
 
-    //  Our bullet group
+	bullets = [];
     bullets = game.add.group();
 	bullets.shipType = "player";
     bullets.createMultiple(config.bullet.playerNumber, 'bullet');
     bullets.setAll('anchor.x', 0.5);
     bullets.setAll('anchor.y', 0.5);
     bullets.setAll('outOfBoundsKill', true);
-
-    cursors = game.input.keyboard.createCursorKeys();
-	//Generate player
-	player = new PlayerShip(game, config.player.startX, config.player.startY, bullets, cursors); 
-
-    //  Create some baddies to waste :)
+	
+	enemyBullets = [];
     enemyBullets = game.add.group();
 	enemyBullets.shipType = "enemy";
     enemyBullets.createMultiple(config.bullet.enemyNumber, 'bullet');
     enemyBullets.setAll('anchor.x', 0.5);
     enemyBullets.setAll('anchor.y', 0.5);
     enemyBullets.setAll('outOfBoundsKill', true);
-
-    //  Create some baddies to waste :)
-    enemies = [];
-    for (var i = 0; i < config.enemy.number; i++)
-    {
-        //enemies in random positions
-		//enemies.push(new EnemyShip(i, game, game.world.randomX, game.world.randomY, enemyBullets, player));
-		//Enemies down right hand side
-		enemies.push(new EnemyShip(i, game, game.world.width - 50, game.world.randomY, enemyBullets, player));
-        //enemies[i].ship.filters = [lightFilter];
-    }
 	
-    // Create some friends to help :)
-    friendBullets = game.add.group();
+	friendBullets = game.add.group();
 	friendBullets.shipType = "friend";
     friendBullets.createMultiple(config.bullet.friendNumber, 'bullet');
     friendBullets.setAll('anchor.x', 0.5);
     friendBullets.setAll('anchor.y', 0.5);
     friendBullets.setAll('outOfBoundsKill', true);
-    friends = [];
-    for (var i = 0; i < config.friend.number; i++) {
-       //Friens in random positions
-	   //friends.push(new FriendlyShip(i, game, game.world.randomX, game.worldrandomY, friendBullets, player));
-       //friends down left hand side
-	   friends.push(new FriendlyShip(i, game, 50, game.world.randomY, friendBullets, player));
-    }
+	
+	beginNewGame(1);
 
-    for(var i=0; i<config.enemy.number; i++) {
-        enemies[i].setOpponents(friends);
-        enemies[i].setAllies(enemies);
-        enemies[i].pushOpponent(player);
-    }
-    for(var i=0; i<config.friend.number; i++) {
-        friends[i].setOpponents(enemies);
-        friends[i].setAllies(friends);
-    }
     //  Explosion pool
     explosions = game.add.group();
 
@@ -126,9 +100,7 @@ function create () {
     }
 
     game.camera.focusOnXY(0, 0);
-
-    cursors = game.input.keyboard.createCursorKeys();
-    background = game.add.sprite(0, 0);
+	background = game.add.sprite(0, 0);
     background.width = config.map.width;
     background.height = config.map.width;
 
@@ -138,13 +110,79 @@ function create () {
     lightFilter.alpha = 1.0;
     lightFilter.red = 1.0;
     lightFilter.green = 1.0;
-    lightFilter.blue = 2.0;
-
+    lightFilter.blue = 2.0
     background.filters = [lightFilter];
+	
+
 	}
 }
 
+function beginNewGame(ln)
+{
+	player = new PlayerShip(game, config.player.startX, config.player.startY, bullets, cursors); 
+
+	for(var k = 0; k < enemies.length; k++)
+	{
+		enemies[k].ship.kill();
+	}
+	enemies = [];
+
+    for (var i = 0; i < ln; i++)
+    {
+        //enemies in random positions
+		//enemies.push(new EnemyShip(i, game, game.world.randomX, game.world.randomY, enemyBullets, player));
+		//Enemies down right hand side
+		enemies.push(new EnemyShip(i, game, game.world.width - 50, game.world.randomY, enemyBullets, player));
+        //enemies[i].ship.filters = [lightFilter];
+    }
+	
+	for(var k = 0; k < friends.length; k++)
+	{
+		friends[k].ship.kill();
+	}
+	friends = [];
+    for (var i = 0; i < config.friend.number; i++) {
+       //Friens in random positions
+	   //friends.push(new FriendlyShip(i, game, game.world.randomX, game.worldrandomY, friendBullets, player));
+       //friends down left hand side
+	   friends.push(new FriendlyShip(i, game, 50, game.world.randomY, friendBullets, player));
+    }
+
+    for(var i=0; i < ln; i++) {
+        enemies[i].setOpponents(friends);
+        enemies[i].setAllies(enemies);
+        enemies[i].pushOpponent(player);
+    }
+    for(var i=0; i<config.friend.number; i++) {
+        friends[i].setOpponents(enemies);
+        friends[i].setAllies(friends);
+    }
+
+//player.health = config.player.health
+}
+
 function update () {
+//game over
+	if(player.alive == false)
+	{
+		levelNumber = config.enemy.number;
+		//alert("You be dead!");
+		beginNewGame(levelNumber);
+	}
+	var allEnemiesDead = true;
+	for (var i = 0; i < enemies.length; i++)
+	{
+		if(enemies[i].ship.alive) 
+		{
+			allEnemiesDead = false;
+			break;
+		}
+	}
+	if(allEnemiesDead)
+	{
+		//alert("WINNAH!");
+		beginNewGame(levelNumber*=2);
+	}
 
     var result = false;
 
@@ -152,7 +190,7 @@ function update () {
 	game.physics.collide(friendBullets, player.ship, bulletHitShip, null, this);
 	game.physics.collide(bullets, player.ship, bulletHitShip, null, this);
 
-    for (var i = 0; i < config.enemy.number; i++)
+    for (var i = 0; i < enemies.length; i++)
     {
         if (enemies[i].alive)
         {

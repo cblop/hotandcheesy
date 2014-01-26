@@ -2,7 +2,7 @@ var config = {
 	"map": {	
         "width": 1200, 
         "height": 400,
-		"lightEffectsOn": 1,
+		"lightEffectsOn": 0,
 		},
 
 	"bullet": {	
@@ -35,11 +35,11 @@ var config = {
         },
 
 	"friend": {	
-        "number":           0,
+        "number":           1,
         },
 
 	"enemy": {	
-        "number":           20,
+        "number":           1,
         },
 
          "collide": {"playerHitsEnemy": 1, "playerHitsFriend": 1, "playerHitsPlayer": 1,
