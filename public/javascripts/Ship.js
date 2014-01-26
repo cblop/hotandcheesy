@@ -16,6 +16,11 @@ Ship = function(game, sprite, bullets) {
 	this.ship = sprite;
     this.ship.anchor.setTo(0.5, 0.5);
     this.ship.bringToTop();
+
+	this.shield = game.add.sprite(this.ship.x, this.ship.y,'shield');
+	this.shield.anchor.setTo(0.5,0.5);
+	this.shield.bringToTop();
+	this.shield.kill();
 	//  This will force it to decelerate and limit its speed
     //this.ship.body.drag.setTo(200, 200);
     this.ship.body.maxVelocity.setTo(config.ship.maxVelX, config.ship.maxVelY);
@@ -56,19 +61,23 @@ Ship = function(game, sprite, bullets) {
 		    bullet.reset(this.ship.x, this.ship.y);
 		    bullet.rotation = this.ship.rotation;
             this.game.physics.velocityFromRotation(this.ship.rotation, config.bullet.speed, bullet.body.velocity);
-            this.numberOfShots++;
+            this.numberOfShots+=1;
 		}
 
 	};
 
-	this.damage = function(amount) {
+	this.damage = function(amount, angleOfAttack) {
 	    this.health -= amount;
 	    if (this.health <= 0)
 	    {
 	        this.alive = false;
 	        this.ship.kill();
             return true;
-	    }
+	    }else if(amount > 0){
+		this.shield.reset(this.ship.x, this.ship.y);
+		this.shield.lifespan = 800;
+		this.shield.rotation = angleOfAttack;
+	}
 	    return false;
 	};
 
