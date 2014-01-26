@@ -10,10 +10,11 @@ function preload () {
     game.load.spritesheet('kaboom', 'assets/ships/explosion.png', 100, 100, 25);
    game.load.script('light', 'assets/filters/light.js');
 	game.load.image('shield','assets/ships/shield.png');
+	game.load.image('stars','assets/ships/stars.png');
     
 }
 
-var land;
+var stars;
 
 var player;
 
@@ -58,6 +59,9 @@ function create () {
     healthBarRect = healthbar.drawRect(0, 0, 20, healthBarHeight);
 
     game.world.setBounds(0,0,config.map.width,config.map.height);
+    stars = game.add.tileSprite(0,0,config.map.width, config.map.height, 'stars');
+    stars.fixedToCamera = true;
+
 
     //  Our bullet group
     bullets = game.add.group();
@@ -223,6 +227,8 @@ function update () {
     //healthbar.drawRect(10, config.map.height - 10, 20, -100 + (100 * (player.health / config.player.health)));
 
 //    fireFilter.update();
+    stars.tilePosition.x = -game.camera.x;
+    stars.tilePosition.y = -game.camera.y;
 
 }
 
