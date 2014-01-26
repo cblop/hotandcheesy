@@ -25,7 +25,7 @@ var config = {
         "maxTurn":          0.06,
         "startX":           150,
         "startY":           450,
-        "fireRate":         1000, 
+        "fireRate":         500, 
         "health":           20,
         "dragX":            200, 
         "dragY":            200,
