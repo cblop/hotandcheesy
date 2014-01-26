@@ -10,15 +10,13 @@ Phaser.Filter.Light = function (game, xval, yval) {
     this.uniforms.red = { type: '1f', value: 1.0 }
     this.uniforms.green = { type: '1f', value: 1.0 }
     this.uniforms.blue = { type: '1f', value: 2.0 }
-    this.uniforms.xpos = { type: '1f', value: xval }
-    this.uniforms.ypos = { type: '1f', value: yval }
+    this.uniforms.fshot = { type: '2f', value: {x: xval, y: yval} }
         
     this.fragmentSrc = [
 
         "precision mediump float;",
         "uniform vec2      resolution;",
-        "uniform float xpos;",
-        "uniform float ypos;",
+        "uniform vec2 fshot;",
         "uniform float     time;",
         "uniform float     alpha;",
         "uniform float     red;",
@@ -26,7 +24,7 @@ Phaser.Filter.Light = function (game, xval, yval) {
         "uniform float     blue;",
 
         "void main(void) {",
-        "vec2 lightPosition = vec2(xpos, ypos);",
+        "vec2 lightPosition = fshot;",
         "float radius = 1000.0;",
         "float distance  = length( lightPosition - gl_FragCoord.xy );",
         "float maxDistance = pow( radius, 0.20);",
@@ -135,11 +133,11 @@ Object.defineProperty(Phaser.Filter.Light.prototype, 'speed', {
 Object.defineProperty(Phaser.Filter.Light.prototype, 'xpos', {
 
     get: function() {
-        return this.uniforms.xpos.value;
+        return this.uniforms.fshot.value.x;
     },
 
     set: function(value) {
-        this.uniforms.xpos.value = value;
+        this.uniforms.fshot.value.x = value;
     }
 
 });
@@ -147,11 +145,11 @@ Object.defineProperty(Phaser.Filter.Light.prototype, 'xpos', {
 Object.defineProperty(Phaser.Filter.Light.prototype, 'ypos', {
 
     get: function() {
-        return this.uniforms.ypos.value;
+        return this.uniforms.fshot.value.y;
     },
 
     set: function(value) {
-        this.uniforms.ypos.value = value;
+        this.uniforms.fshot.value.y = value;
     }
 
 });
