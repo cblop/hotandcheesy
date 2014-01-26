@@ -9,8 +9,8 @@ function preload () {
     game.load.image('bullet', 'assets/games/tanks/bullet.png');
     game.load.image('earth', 'assets/games/tanks/scorched_earth.png');
     game.load.spritesheet('kaboom', 'assets/games/tanks/explosion.png', 64, 64, 23);
-    game.load.script('light', 'assets/filters/light.js');
-    game.load.script('fire', 'assets/filters/Fire.js');
+//    game.load.script('light', 'assets/filters/light.js');
+//    game.load.script('fire', 'assets/filters/Fire.js');
     
 }
 
@@ -95,9 +95,9 @@ function create () {
     background = game.add.sprite(0, 0);
     background.width = config.map.width;
     background.height = config.map.width;
-    fireFilter = game.add.filter('Fire', config.map.width, config.map.height);
-    fireFilter.alpha = 0.0;
-    background.filters = [fireFilter];
+//    fireFilter = game.add.filter('Fire', config.map.width, config.map.height);
+//    fireFilter.alpha = 0.0;
+//    background.filters = [fireFilter];
 
 
 }
@@ -144,7 +144,7 @@ function update () {
     //barback.drawRect(8, config.map.height - 8, 24, -104);
     //healthbar.drawRect(10, config.map.height - 10, 20, -100 + (100 * (player.health / config.player.health)));
 
-    //fireFilter.update();
+//    fireFilter.update();
 
 }
 

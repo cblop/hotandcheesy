@@ -1,5 +1,5 @@
 var config = {
-	"map": {	"width": 1200, "height": 700,
+	"map": {	"width": 800, "height": 600,
 		},
 	"bullet": {	"friendlyNumber": 100, "enemyNumber": 100, "playerNumber": 30,
 			"explosionNumber": 10,
