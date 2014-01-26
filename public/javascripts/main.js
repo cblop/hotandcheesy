@@ -210,8 +210,14 @@ function update () {
 
 	if(config.map.lightsOn == "1")
 	{
-		lightFilter.xpos = bullets.getAt(0).x;
-		lightFilter.ypos = config.map.height - bullets.getAt(0).y;
+		lightFilter.eshot0 = {x: enemyBullets.getAt(0).x, y: config.map.height - enemyBullets.getAt(0).y };
+        lightFilter.eshot1 = {x: enemyBullets.getAt(1).x, y: config.map.height - bullets.getAt(1).y };
+        lightFilter.eshot2 = {x: enemyBullets.getAt(2).x, y: config.map.height - enemyBullets.getAt(2).y };
+        lightFilter.eshot3 = {x: enemyBullets.getAt(3).x, y: config.map.height - enemyBullets.getAt(3).y };
+        lightFilter.eshot4 = {x: enemyBullets.getAt(4).x, y: config.map.height - bullets.getAt(4).y };
+        lightFilter.eshot5 = {x: enemyBullets.getAt(5).x, y: config.map.height - enemyBullets.getAt(5).y };
+        lightFilter.eshot6 = {x: enemyBullets.getAt(6).x, y: config.map.height - bullets.getAt(4).y };
+        lightFilter.eshot7 = {x: enemyBullets.getAt(7).x, y: config.map.height - enemyBullets.getAt(5).y };
 		lightFilter.update();
 	}
 
