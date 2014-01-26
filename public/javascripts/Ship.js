@@ -28,7 +28,10 @@ Ship = function(game, sprite, bullets) {
 		this.allies = allies;}
 	this.setOpponents = function(opponents) {
 		this.opponents = opponents;}
-
+	this.pushOpponent = function(opponent){
+		this.opponents.push(opponent);}
+	this.pushAlly = function(ally) {
+		this.allies.push(ally);}
 
 	this.turn = function(delRot) {
 		this.ship.rotation += delRot;
