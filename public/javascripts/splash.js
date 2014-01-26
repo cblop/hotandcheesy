@@ -24,6 +24,7 @@ var splashText = function(game, text, seconds, milliseconds, andThen, customStyl
         }
         style = customStyle;
     }
+    game.input.disabled = true;
     game.paused = true;
     var textObj = game.add.text(game.world.width/2,game.world.height/2 ,text, style);
     textObj.anchor.x = 0.5;
@@ -32,6 +33,7 @@ var splashText = function(game, text, seconds, milliseconds, andThen, customStyl
     {
         textObj.destroy();
         game.paused = false;
+        game.input.disabled = false;
         if (andThen)
         {
             andThen();

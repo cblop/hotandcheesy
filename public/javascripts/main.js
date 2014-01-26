@@ -151,8 +151,6 @@ function create () {
                      "survival is relying on the light of battle to survive. While " +
                      "your allies will do their best to help you, you must fend for " +
                      "yourself to wipe out the enemy ships. While firing your weapons " +
-                     "illuminates a path, it also draw the attention of the enemies.", 10, 0,
-    function() { splashText(game, "Use the arrow keys to move, space-bar to shoot.", 3, 0); }
                      );
 }
 
@@ -204,7 +202,7 @@ function update () {
 	{
 		levelNumber = config.enemy.number;
 		beginNewGame(levelNumber);
-        splashText(game, "You LOSE! Back to " + levelNumber + " enemies.", 2, 0, null);
+        splashText(game, "You LOSE. Back to level " + levelNumber, 2, 0, null);
 	}
 	var allEnemiesDead = true;
 	for (var i = 0; i < enemies.length; i++)
@@ -218,6 +216,7 @@ function update () {
 	if(allEnemiesDead)
 	{
 		beginNewGame(levelNumber*=2);
+
         splashText(game, "Sweet. Onto " + levelNumber + " enemies.", 2, 0, null);
 	}
 
@@ -339,12 +338,14 @@ function shipsCollide (shipA, shipB) {
 
     if (destroyedA)
     {
+
         var explosionAnimation = explosions.getFirstDead() || explosions.getFirstAlive();
         explosionAnimation.reset(shipA.ship.x, shipA.ship.y);
         explosionAnimation.play('kaboom', 30, false, true);
     }
     else if (destroyedB)
     {
+
         var explosionAnimation = explosions.getFirstDead() || explosions.getFirstAlive();
         explosionAnimation.reset(shipB.ship.x, shipB.ship.y);
         explosionAnimation.play('kaboom', 30, false, true);
@@ -373,13 +374,9 @@ function bulletHitShip (ship, bullet) {
 	var destroyed = ship.damage(dam, game.physics.angleBetween(ship.ship, bullet));
 	//console.log(destroyed);
 	if(destroyed){
+
 		var explosionAnimation = explosions.getFirstDead() || explosions.getFirstAlive();
-		/*if(explosions.getFirstDead()){
-			explosionAnimation = explosions.getFirstDead();
-		}else{
-			explosionAnimation = explosions.getFirstAlive();
-			explosionAnimation.kill();
-		}*/
+
 		explosionAnimation.reset(ship.ship.x, ship.ship.y);
 		explosionAnimation.play('kaboom', 30, false, true);
 	}
