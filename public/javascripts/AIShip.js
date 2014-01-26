@@ -14,8 +14,8 @@ function AIShip(index, game, sprite, bullets, player) {
     var thisref = this;
 
     // Private variables
-    var firingDistance = 500;   // The distance within which a target will be fired at
-    var evasionDistance = 150;  // The distance within which this ship will begin to evade its target
+    var firingDistance = 800;   // The distance within which a target will be fired at
+    var evasionDistance = 200;  // The distance within which this ship will begin to evade its target
     var firingAngle = 0.1;      // The maximum angle of deviation outside of which we will not fire
     // Target prioritisation constants
     var shotNumberWeight = 1;   // The weighting applied to the number of shots an opponent has taken
