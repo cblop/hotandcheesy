@@ -58,6 +58,8 @@ function create () {
     bullets.createMultiple(config.bullet.playerNumber, 'bullet');
     bullets.setAll('anchor.x', 0.5);
     bullets.setAll('anchor.y', 0.5);
+    bullets.setAll('x', -300);
+    bullets.setAll('y', -300);
     bullets.setAll('outOfBoundsKill', true);
 	
 	enemyBullets = [];
@@ -66,6 +68,8 @@ function create () {
     enemyBullets.createMultiple(config.bullet.enemyNumber, 'bullet');
     enemyBullets.setAll('anchor.x', 0.5);
     enemyBullets.setAll('anchor.y', 0.5);
+    enemyBullets.setAll('x', -300);
+    enemyBullets.setAll('y', -300);
     enemyBullets.setAll('outOfBoundsKill', true);
 	
 	friendBullets = game.add.group();
@@ -73,6 +77,8 @@ function create () {
     friendBullets.createMultiple(config.bullet.friendNumber, 'bullet');
     friendBullets.setAll('anchor.x', 0.5);
     friendBullets.setAll('anchor.y', 0.5);
+    friendBullets.setAll('x', -300);
+    friendBullets.setAll('y', -300);
     friendBullets.setAll('outOfBoundsKill', true);
 	player = new PlayerShip(game, config.player.startX, config.player.startY, bullets, cursors); 
 
@@ -116,6 +122,9 @@ function create () {
         explosionAnimation.animations.add('kaboom');
     }
 
+    explosions.setAll('x', -300);
+    explosions.setAll('y', -300);
+
     game.camera.focusOnXY(0, 0);
 	background = game.add.sprite(0, 0);
     background.width = config.map.width;
@@ -123,12 +132,8 @@ function create () {
 
     if(config.map.lightEffectsOn == "1")
 	{
-		lightFilter = game.add.filter('Light', config.map.width, config.map.height);
-		lightFilter.alpha = 1.0;
-		lightFilter.red = 1.0;
-		lightFilter.green = 1.0;
-		lightFilter.blue = 2.0
-		background.filters = [lightFilter];
+	lightFilter = game.add.filter('Light', config.map.width, config.map.height);
+    background.filters = [lightFilter];
 	}
 	barback = game.add.graphics(0, 0);
     healthbar = game.add.graphics(10, config.map.height - healthBarHeight - 10);
@@ -279,9 +284,23 @@ function update () {
         lightFilter.fshot2 = {x: friendBullets.getAt(2).x, y: config.map.height - friendBullets.getAt(2).y };
         lightFilter.fshot3 = {x: friendBullets.getAt(3).x, y: config.map.height - friendBullets.getAt(3).y };
 
+ 		lightFilter.expl0 = {x: explosions.getAt(0).x, y: config.map.height - explosions.getAt(0).y };
+        lightFilter.expl1 = {x: explosions.getAt(1).x, y: config.map.height - explosions.getAt(1).y };
+        lightFilter.expl2 = {x: explosions.getAt(2).x, y: config.map.height - explosions.getAt(2).y };
+        lightFilter.expl3 = {x: explosions.getAt(3).x, y: config.map.height - explosions.getAt(3).y };
         lightFilter.pshot0 = {x: bullets.getAt(0).x, y: config.map.height - bullets.getAt(0).y };
         lightFilter.pshot1 = {x: bullets.getAt(1).x, y: config.map.height - bullets.getAt(1).y };
 
+ for (var i = 0;i < 4; i++) {
+            explosionAnimation = explosions.getAt(i);
+            if (explosionAnimation.animations.getAnimation('kaboom').isFinished) {
+                explosionAnimation.x = -300;
+                explosionAnimation.y = -300;
+                //explosionAnimation.y = config.map.height;
+            }
+        }
+
+        lightFilter.diameter = config.shader.diameter;
 		lightFilter.update();
 	}
 
@@ -332,6 +351,9 @@ function identifyShip(shipType, index) {
 }
 
 function bulletHitShip (ship, bullet) {
+	bullet.x = -300;
+    //bullet.y = config.map.height;
+    bullet.y = -300;
 	bullet.kill();
 	ship = identifyShip(ship.shipType, ship.index);
 	var dam = bulletDamage(ship.ship.shipType, bullet.group.shipType);
