@@ -24,6 +24,7 @@ Phaser.Filter.Light = function (game, xval, yval) {
         "uniform float     red;",
         "uniform float     green;",
         "uniform float     blue;",
+        "uniform float 	   radius;",
 
         "void main(void) {",
         "vec2 lightPosition = vec2(xpos, ypos);",
