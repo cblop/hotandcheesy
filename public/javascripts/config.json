@@ -5,7 +5,7 @@ var config = {
 		},
 
 	"bullet": {	
-        "friendlyNumber":   100, 
+        "friendNumber":     100, 
         "enemyNumber":      100, 
         "playerNumber":     30,
         "explosionNumber":  100,
