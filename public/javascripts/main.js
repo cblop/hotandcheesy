@@ -27,6 +27,8 @@ var circle;
 
 var healthbar;
 var barback;
+var healthBarHeight = 100;
+var healthBarRect;
 
 var lightFilter;
 //var fireFilter;
@@ -38,28 +40,24 @@ window.addEventListener('keydown',dSpace,true);void 0;
 
 function create () {
 
-    //  Resize our game world to be a 2000 x 2000 square
-
+    // TODO: Health bar is terrible hack. There MUST be a better mechanism for
+    // this. (See also the health bar code in the update function).
     barback = game.add.graphics(0, 0);
-    healthbar = game.add.graphics(0, 0);
+    healthbar = game.add.graphics(10, config.map.height - healthBarHeight - 10);
     barback.lineStyle(2, 0xFFFFFF, 1); // width, color (0x0000FF), alpha (0 -> 1) // required settings
     healthbar.lineStyle(2, 0x00FF00, 1); // width, color (0x0000FF), alpha (0 -> 1) // required settings
     barback.beginFill(0x000000, 1);
     healthbar.beginFill(0x00FF00, 1);
     game.world.setBounds(0,0,config.map.width,config.map.height);
+    barback.drawRect(8, config.map.height - 8, 24, -104);
+    healthBarRect = healthbar.drawRect(0, 0, 20, healthBarHeight);
 
-
-    //  Our tiled scrolling background
-    //land = game.add.tileSprite(0, 0, 800, 600, 'earth');
-    //land.fixedToCamera = true;
-
-
-     //  Our bullet group
-     bullets = game.add.group();
-     bullets.createMultiple(config.bullet.playerNumber, 'bullet');
-     bullets.setAll('anchor.x', 0.5);
-     bullets.setAll('anchor.y', 0.5);
-     bullets.setAll('outOfBoundsKill', true);
+    //  Our bullet group
+    bullets = game.add.group();
+    bullets.createMultiple(config.bullet.playerNumber, 'bullet');
+    bullets.setAll('anchor.x', 0.5);
+    bullets.setAll('anchor.y', 0.5);
+    bullets.setAll('outOfBoundsKill', true);
 
     cursors = game.input.keyboard.createCursorKeys();
 	//Generate player
@@ -167,11 +165,14 @@ function update () {
         player.updateVelocity();
     }
 
-    barback.drawRect(8, config.map.height - 8, 24, -104);
-    healthbar.drawRect(10, config.map.height - 10, 20, -100 + (100 * (player.health / config.player.health)));
+    healthbar.y = config.map.height - healthBarHeight - 10 + 100 * (1 - (player.health / config.player.health));
+    healthbar.scale.y = (player.health / config.player.health);
+    // This was extant after a merge. Resolving conflict by commenting. This is
+    // because I *think* this code is old and incorrect. (Matt K).
+    //barback.drawRect(8, config.map.height - 8, 24, -104);
+    //healthbar.drawRect(10, config.map.height - 10, 20, -100 + (100 * (player.health / config.player.health)));
 
-//    fireFilter.update();
-
+    //fireFilter.update();
 
 }
 

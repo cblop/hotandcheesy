@@ -1,5 +1,5 @@
 Ship = function(game, sprite, bullets) {
-//Initialese a ship with movement, firing and death
+    //Initialese a ship with movement, firing and death
 	//Stores necessary information about the ship
 	this.game = game;
 	this.bullets = bullets;
@@ -10,6 +10,7 @@ Ship = function(game, sprite, bullets) {
 	this.health = config.ship.health;
 	this.allies = [];
 	this.opponents = [];
+    this.numberOfShots = 0; //Used to calculate visibility of ship
 	
 	//Applies the sprite to the ship
 	this.ship = sprite;
@@ -52,10 +53,11 @@ Ship = function(game, sprite, bullets) {
 		    var bullet = bullets.getFirstDead();
 		    bullet.reset(this.ship.x, this.ship.y);
 		    bullet.rotation = this.ship.rotation;
-	      	    this.game.physics.velocityFromRotation(this.ship.rotation, config.bullet.speed, bullet.body.velocity);
+            this.game.physics.velocityFromRotation(this.ship.rotation, config.bullet.speed, bullet.body.velocity);
+            this.numberOfShots++;
 		}
 
-	}
+	};
 
 	this.damage = function(amount) {
 	    this.health -= amount;
