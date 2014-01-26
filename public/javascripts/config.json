@@ -43,7 +43,7 @@ var config = {
         },
 
 	"enemy": {	
-        "number":           4,
+        "number":           64,
         },
 
          "collide": {"playerHitsEnemy": 1, "playerHitsFriend": 1, "playerHitsPlayer": 1,
