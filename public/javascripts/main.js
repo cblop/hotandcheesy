@@ -150,7 +150,7 @@ function create () {
     splashText(game, "In a crippled ship in the depths of space, your last chance of " +
                      "survival is relying on the light of battle to survive. While " +
                      "your allies will do their best to help you, you must fend for " +
-                     "yourself to wipe out the enemy ships. While firing your weapons " +
+                     "yourself to wipe out the enemy ships. While firing your weapons will illuminate the path, it will also draw the attention of your enemies." 
                      );
 }
 
