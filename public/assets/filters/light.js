@@ -25,6 +25,12 @@ Phaser.Filter.Light = function (game, xval, yval) {
     this.uniforms.fshot1 = { type: '2f', value: {x: xval, y: yval} }
     this.uniforms.fshot2 = { type: '2f', value: {x: xval, y: yval} }
     this.uniforms.fshot3 = { type: '2f', value: {x: xval, y: yval} }
+
+    this.uniforms.expl0 = { type: '2f', value: {x: xval, y: yval} }
+    this.uniforms.expl1 = { type: '2f', value: {x: xval, y: yval} }
+    this.uniforms.expl2 = { type: '2f', value: {x: xval, y: yval} }
+    this.uniforms.expl3 = { type: '2f', value: {x: xval, y: yval} }
+
     this.uniforms.diameter = { type: '1f', value: 100.0 };
 
     this.fragmentSrc = [
@@ -39,6 +45,11 @@ Phaser.Filter.Light = function (game, xval, yval) {
         "uniform vec2 eshot1;",
         "uniform vec2 eshot2;",
         "uniform vec2 eshot3;",
+
+        "uniform vec2 expl0;",
+        "uniform vec2 expl1;",
+        "uniform vec2 expl2;",
+        "uniform vec2 expl3;",
 
         "uniform vec2 fshot0;",
         "uniform vec2 fshot1;",
@@ -57,7 +68,7 @@ Phaser.Filter.Light = function (game, xval, yval) {
             "float spread;    // Light spread",
             "float size;   // Light bulb size",
         "};",
-        "Light lights[10];",
+        "Light lights[14];",
 
         "void main(void) {",
 
@@ -91,6 +102,18 @@ Phaser.Filter.Light = function (game, xval, yval) {
         "Light f3;",
         "f3.pos = fshot3;",
 
+        "Light x0;",
+        "x0.pos = expl0;",
+
+        "Light x1;",
+        "x1.pos = expl1;",
+
+        "Light x2;",
+        "x2.pos = expl2;",
+
+        "Light x3;",
+        "x3.pos = expl3;",
+
 
         "float intensity = 0.0;",
         "lights[0] = e0;",
@@ -103,8 +126,12 @@ Phaser.Filter.Light = function (game, xval, yval) {
         "lights[7] = f1;",
         "lights[8] = f2;",
         "lights[9] = f3;",
+        "lights[10] = x0;",
+        "lights[11] = x1;",
+        "lights[12] = x2;",
+        "lights[13] = x3;",
 
-        "for(int i = 0; i < 10; i++){",
+        "for(int i = 0; i < 14; i++){",
 
             "float x_dis = lights[i].pos.x - gl_FragCoord.x;",
             "float y_dis = lights[i].pos.y - gl_FragCoord.y;",
@@ -295,5 +322,33 @@ Object.defineProperty(Phaser.Filter.Light.prototype, 'eshot3', {
         return this.uniforms.eshot3.value;},
     set: function(value) {
         this.uniforms.eshot3.value = value;}
+});
+
+Object.defineProperty(Phaser.Filter.Light.prototype, 'expl0', {
+    get: function() {
+        return this.uniforms.expl0.value;},
+    set: function(value) {
+        this.uniforms.expl0.value = value;}
+});
+
+Object.defineProperty(Phaser.Filter.Light.prototype, 'expl1', {
+    get: function() {
+        return this.uniforms.expl1.value;},
+    set: function(value) {
+        this.uniforms.expl1.value = value;}
+});
+
+Object.defineProperty(Phaser.Filter.Light.prototype, 'expl2', {
+    get: function() {
+        return this.uniforms.expl2.value;},
+    set: function(value) {
+        this.uniforms.expl2.value = value;}
+});
+
+Object.defineProperty(Phaser.Filter.Light.prototype, 'expl3', {
+    get: function() {
+        return this.uniforms.expl3.value;},
+    set: function(value) {
+        this.uniforms.expl3.value = value;}
 });
 

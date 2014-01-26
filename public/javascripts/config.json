@@ -9,13 +9,13 @@ var config = {
         "friendNumber":     4, 
         "enemyNumber":      4, 
         "playerNumber":     2,
-        "explosionNumber":  100,
+        "explosionNumber":  4,
         "speed":            1000, 
 		},
 
 	"ship": {	
         "fireRate":         1000,
-        "health":           100,
+        "health":           4,
         "maxVelX":          400, 
         "maxVelY":          400,
 		},

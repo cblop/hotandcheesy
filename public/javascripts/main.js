@@ -134,10 +134,6 @@ function create () {
     if(config.map.lightEffectsOn == "1")
 	{
 	lightFilter = game.add.filter('Light', config.map.width, config.map.height);
-    lightFilter.alpha = 1.0;
-    lightFilter.red = 1.0;
-    lightFilter.green = 1.0;
-    lightFilter.blue = 2.0;
 
     background.filters = [lightFilter];
 	}
@@ -218,6 +214,11 @@ function update () {
         lightFilter.fshot1 = {x: friendBullets.getAt(1).x, y: config.map.height - friendBullets.getAt(1).y };
         lightFilter.fshot2 = {x: friendBullets.getAt(2).x, y: config.map.height - friendBullets.getAt(2).y };
         lightFilter.fshot3 = {x: friendBullets.getAt(3).x, y: config.map.height - friendBullets.getAt(3).y };
+
+        lightFilter.expl0 = {x: explosions.getAt(0).x, y: config.map.height - explosions.getAt(0).y };
+        lightFilter.expl1 = {x: explosions.getAt(1).x, y: config.map.height - explosions.getAt(1).y };
+        lightFilter.expl2 = {x: explosions.getAt(2).x, y: config.map.height - explosions.getAt(2).y };
+        lightFilter.expl3 = {x: explosions.getAt(3).x, y: config.map.height - explosions.getAt(3).y };
 
         lightFilter.pshot0 = {x: bullets.getAt(0).x, y: config.map.height - bullets.getAt(0).y };
         lightFilter.pshot1 = {x: bullets.getAt(1).x, y: config.map.height - bullets.getAt(1).y };
