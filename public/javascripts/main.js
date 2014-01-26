@@ -201,7 +201,7 @@ function update () {
 //game over
 	if(player.alive == false)
 	{
-		levelNumber = config.enemy.number;
+		levelNumber = 1;
 		beginNewGame(levelNumber);
         splashText(game, "You LOSE. Back to level " + levelNumber, 2, 0, null);
 	}
